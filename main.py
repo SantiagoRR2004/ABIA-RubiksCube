@@ -14,7 +14,9 @@ cubo.mover(cubo.F)
 
 print("CUBO resultado del movimiento F:\n" + cubo.visualizar())
 
-movs = int(sys.argv[1])
+movs = 2
+if len(sys.argv) > 1:
+    movs = int(sys.argv[1])
 
 movsMezcla = cubo.mezclar(movs)
 
@@ -26,9 +28,8 @@ print()
 print("CUBO INICIAL (MEZCLADO):\n" + cubo.visualizar())
 
 
-"""
-Descomentar una vez se implemente la búsqueda en anchura
-#Creación de un problema
+# Descomentar una vez se implemente la búsqueda en anchura
+# Creación de un problema
 problema = Problema(EstadoRubik(cubo), BusquedaAnchura())
 
 
@@ -43,5 +44,3 @@ if opsSolucion != None:
     print("CUBO FINAL:\n" + cubo.visualizar())
 else:
     print("no se ha encontrado solución")
-
-"""

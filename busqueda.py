@@ -25,16 +25,19 @@ class BusquedaAnchura(Busqueda):
         cerrados = dict()
         abiertos.append(NodoAnchura(inicial, None, None))
         while not solucion and len(abiertos) > 0:
-            # COMPLETAR LINEA DE CODIGO
+            nodoActual = abiertos.pop(0)
             actual = nodoActual.estado
             if actual.esFinal():
                 solucion = True
             else:
-                cerrados[actual.cubo.visualizar()] = nodoActual
+                # cerrados[actual.cubo.visualizar()] = nodoActual
                 for operador in actual.operadoresAplicables():
                     hijo = actual.aplicarOperador(operador)
                     if hijo.cubo.visualizar() not in cerrados.keys():
                         abiertos.append(NodoAnchura(hijo, nodoActual, operador))
+                        cerrados[hijo.cubo.visualizar()] = (
+                            hijo  # utilizamos CERRADOS para mantener también traza de los nodos añadidos a ABIERTOS
+                        )
         if solucion:
             lista = []
             nodo = nodoActual
