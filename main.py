@@ -4,29 +4,26 @@ from problemaRubik import *
 from busqueda import *
 
 
-
 cubo = Cubo()
 
 print("CUBO SIN MEZCLAR:\n" + cubo.visualizar())
 
 
-#Mover frontal face
+# Mover frontal face
 cubo.mover(cubo.F)
 
 print("CUBO resultado del movimiento F:\n" + cubo.visualizar())
 
-movs=int(sys.argv[1])
+movs = int(sys.argv[1])
 
 movsMezcla = cubo.mezclar(movs)
 
-print("MOVIMIENTOS ALEATORIOS:",movs)
+print("MOVIMIENTOS ALEATORIOS:", movs)
 for m in movsMezcla:
     print(cubo.visualizarMovimiento(m) + " ")
 print()
 
 print("CUBO INICIAL (MEZCLADO):\n" + cubo.visualizar())
-
-
 
 
 """
