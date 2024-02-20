@@ -3,35 +3,28 @@ from cubo import *
 from problemaRubik import *
 from busqueda import *
 
-
 cubo = Cubo()
 
-print("CUBO SIN MEZCLAR:\n" + cubo.visualizar())
+#print("CUBO SIN MEZCLAR:\n" + cubo.visualizar())
 
+#Mover frontal face
+#cubo.mover(cubo.F)
 
-# Mover frontal face
-cubo.mover(cubo.F)
+#print("CUBO resultado del movimiento F:\n" + cubo.visualizar())
 
-print("CUBO resultado del movimiento F:\n" + cubo.visualizar())
-
-movs = 2
-if len(sys.argv) > 1:
-    movs = int(sys.argv[1])
+movs=int(sys.argv[1])
 
 movsMezcla = cubo.mezclar(movs)
 
-print("MOVIMIENTOS ALEATORIOS:", movs)
+print("MOVIMIENTOS ALEATORIOS:",movs)
 for m in movsMezcla:
     print(cubo.visualizarMovimiento(m) + " ")
 print()
 
-print("CUBO INICIAL (MEZCLADO):\n" + cubo.visualizar())
+#print("CUBO INICIAL (MEZCLADO):\n" + cubo.visualizar())
 
-
-# Descomentar una vez se implemente la búsqueda en anchura
-# Creación de un problema
-problema = Problema(EstadoRubik(cubo), BusquedaAnchura())
-
+#Creación de un problema
+problema = Problema(EstadoRubik(cubo), BusquedaProfundidad())
 
 print("SOLUCION:")
 opsSolucion = problema.obtenerSolucion()
