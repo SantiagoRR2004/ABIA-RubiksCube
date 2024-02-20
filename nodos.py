@@ -1,13 +1,14 @@
-from problema import Estado, Operador
-from typing import TypeVar
+from typing import TYPE_CHECKING
 
-N = TypeVar("N", bound="Nodo")
+if TYPE_CHECKING:
+    from nodos import Nodo
+    from problema import Estado, Operador
 
 # Nodos a almacenar como parte de los algoritmos de búsqueda
 
 
 class Nodo:
-    def __init__(self, estado: Estado, padre: N) -> None:
+    def __init__(self, estado: "Estado", padre: "Nodo") -> None:
         self.estado = estado
         self.padre = padre
 
@@ -18,6 +19,6 @@ class Nodo:
 
 
 class NodoAnchura(Nodo):
-    def __init__(self, estado: Estado, padre: N, operador: Operador) -> None:
+    def __init__(self, estado: "Estado", padre: "Nodo", operador: "Operador") -> None:
         super().__init__(estado, padre)
         self.operador = operador

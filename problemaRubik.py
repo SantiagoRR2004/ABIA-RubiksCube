@@ -1,10 +1,10 @@
 from problema import Operador, Estado
-from cubo import Cubo
-from typing import TypeVar
+from typing import TYPE_CHECKING
 
-# Define a type variable that represents the type of the class
-E = TypeVar("E", bound="EstadoRubik")
-O = TypeVar("O", bound="OperadorRubik")
+
+if TYPE_CHECKING:
+    from problemaRubik import EstadoRubik, OperadorRubik
+    from cubo import Cubo
 
 
 # Objeto que implementa la interfaz Estado para un cubo Rubik concreto.
@@ -13,26 +13,26 @@ O = TypeVar("O", bound="OperadorRubik")
 
 class EstadoRubik(Estado):
 
-    def __init__(self, cubo: Cubo) -> None:
+    def __init__(self, cubo: "Cubo") -> None:
 
         self.listaOperadoresAplicables = []
-        for m in Cubo.movimientosPosibles:
+        for m in cubo.movimientosPosibles:
             self.listaOperadoresAplicables.append(OperadorRubik(m))
 
         self.cubo = cubo
 
-    def operadoresAplicables(self) -> list[O]:
+    def operadoresAplicables(self) -> list["OperadorRubik"]:
         return self.listaOperadoresAplicables
 
     def esFinal(self) -> bool:
         return self.cubo.esConfiguracionFinal()
 
-    def aplicarOperador(self, o: O) -> E:
+    def aplicarOperador(self, o: "OperadorRubik") -> "EstadoRubik":
         nuevo = self.cubo.clonar()
         nuevo.mover(o.movimiento)
         return EstadoRubik(nuevo)
 
-    def equals(self, e: E) -> bool:
+    def equals(self, e: "EstadoRubik") -> bool:
         return self.cubo.equals(e.cubo)
 
 

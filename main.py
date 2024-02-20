@@ -2,7 +2,6 @@ import sys
 from cubo import *
 from problemaRubik import *
 from busqueda import *
-from nodos import *
 from problema import *
 
 cubo = Cubo()
