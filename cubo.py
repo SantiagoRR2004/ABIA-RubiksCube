@@ -1,17 +1,21 @@
-from random import *
+from random import randint
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from cubo import Cara, Casilla, Cubo
 
 
 # Clase que encapsula una cara del cubo de Rubik.
 # Cada cara tiene un color asociado (coincide con su índice en el array caras del objeto Cubo) y
 # un array de 9 Casillas distribuidas en "espiral" sobre la cara
 class Cara:
-    def __init__(self, color):
+    def __init__(self, color: int) -> None:
         self.color = color
         self.casillas = []
         for i in range(0, 9):
             self.casillas.append(Casilla(color, i))
 
-    def equal(self, cara):
+    def equal(self, cara: "Cara") -> bool:
         for i, c in enumerate(cara):
             if c.color != self.casillas[i].color:
                 return False
@@ -21,11 +25,11 @@ class Cara:
 # Clase que encapsula una casilla del curbo de Rubik.
 # Mantiene el color de la casilla y su posición correcta final en su respectiva cara (la que corresponde a su color)
 class Casilla:
-    def __init__(self, color, pos):
+    def __init__(self, color: int, pos: int) -> None:
         self.color = color
         self.posicionCorrecta = pos
 
-    def equal(self, casilla):
+    def equal(self, casilla: "Casilla") -> bool:
         if (
             self.color != casilla.color
             or self.posicionCorrecta != casilla.posicionCorrecta
@@ -58,8 +62,6 @@ class Cubo:
            012
            783
            654
-
-
 
     """
 
@@ -157,13 +159,13 @@ class Cubo:
     etq_corta = ["U", "L", "F", "R", "B", "D", "Ui", "Li", "Fi", "Ri", "Bi", "Di"]
 
     # Lista con las 6 caras del cubo
-    def __init__(self):
+    def __init__(self) -> None:
         self.caras = []
         for i in range(0, 6):
             self.caras.append(Cara(i))
 
     # Clonación de objetos cubo
-    def clonar(self):
+    def clonar(self) -> "Cubo":
         c = Cubo()
         for i in range(0, 6):
             c.caras[i].color = self.caras[i].color
@@ -172,7 +174,7 @@ class Cubo:
         return c
 
     # Comprueba si las caras del cubo contienen una configuración final
-    def esConfiguracionFinal(self):
+    def esConfiguracionFinal(self) -> bool:
         for c in self.caras:
             for n in c.casillas:
                 if n.color != c.color:
@@ -180,11 +182,16 @@ class Cubo:
         return True
 
     # Realiza una mezcla aleatoria de las caras del cubo aplicando un número aleatorio de movientos al azar
-    def mezclar(self):
+    def mezclar(self) -> list[int]:
+        """
+        Esto no funciona en python.
+        Se coge la siguiente implementación de la función mezclar
+        porque es la última que se ha implementado.
+        """
         return self.mezclar(randint(0, 30))
 
     # Realiza una mezcla aleatoria de las caras del cubo aplicando el num. indicado de movimientos al azar
-    def mezclar(self, pasos):
+    def mezclar(self, pasos: int) -> list[int]:
         listaMovs = []
         # print(self.movimientosPosibles)
         for i in range(0, pasos):
@@ -195,20 +202,20 @@ class Cubo:
         return listaMovs
 
     # Realiza el moviminnto indicado sobre la correspondiente cara del cubo
-    def mover(self, mov):
+    def mover(self, mov: int) -> None:
         if mov < 6:
             self.girarHorario(mov)
         else:
             self.girarAntiHorario(mov - 6)
 
     # Realiza una lista de movimientos sobre las caras del cubo
-    def moverListaMovs(sefl, listaMovs):
+    def moverListaMovs(self, listaMovs: list[int]) -> None:
         for mov in listaMovs:
             self.mover(mov)
 
     # Giro horario sobre la cara indicada y las casillas fronterizas de las
     # caras vecinas que correspondan
-    def girarHorario(self, idxCara):
+    def girarHorario(self, idxCara: int) -> None:
         aux1 = None
         aux2 = None
         aux3 = None
@@ -243,7 +250,7 @@ class Cubo:
 
     # Giro horario sobre la cara indicada y las casillas fronterizas de las
     # caras vecinas que correspondan
-    def girarAntiHorario(self, idxCara):
+    def girarAntiHorario(self, idxCara: int) -> None:
         aux1 = None
         aux2 = None
         aux3 = None
@@ -277,7 +284,7 @@ class Cubo:
             ] = aux3
 
     # Giro horario sobre las casillas de una cara (no afecta a las caras vecinas)
-    def girarCaraHorario(self, cara):
+    def girarCaraHorario(self, cara: "Cara") -> None:
         copia = []
         for c in cara.casillas:
             copia.append(c)
@@ -287,7 +294,7 @@ class Cubo:
             cara.casillas[(i + 2) % 8] = copia[i]
 
     # Giro antihorario sobre las casillas de una cara (no afecta a las caras vecinas)
-    def girarCaraAntiHorario(self, cara):
+    def girarCaraAntiHorario(self, cara: "Cara") -> None:
         copia = []
         for c in cara.casillas:
             copia.append(c)
@@ -297,14 +304,14 @@ class Cubo:
             cara.casillas[i] = copia[(i + 2) % 8]
 
     # Comparar 2 cubos
-    def equals(self, cubo):
+    def equals(self, cubo: "Cubo") -> bool:
         for i in range(0, 6):
             if not self.caras[i].equals(cubo.caras[i]):
                 return False
         return True
 
     # Visualizar cubo
-    def visualizar(self):
+    def visualizar(self) -> str:
         # Cara 0
         resultado = (
             "    "
@@ -360,26 +367,26 @@ class Cubo:
         )
         return resultado
 
-    def stringFila1(self, cara):
+    def stringFila1(self, cara: "Cara") -> str:
         return (
             self.etq_colores[cara.casillas[0].color]
             + self.etq_colores[cara.casillas[1].color]
             + self.etq_colores[cara.casillas[2].color]
         )
 
-    def stringFila2(self, cara):
+    def stringFila2(self, cara: "Cara") -> str:
         return (
             self.etq_colores[cara.casillas[7].color]
             + self.etq_colores[cara.casillas[8].color]
             + self.etq_colores[cara.casillas[3].color]
         )
 
-    def stringFila3(self, cara):
+    def stringFila3(self, cara: "Cara") -> str:
         return (
             self.etq_colores[cara.casillas[6].color]
             + self.etq_colores[cara.casillas[5].color]
             + self.etq_colores[cara.casillas[4].color]
         )
 
-    def visualizarMovimiento(self, tipo):
+    def visualizarMovimiento(self, tipo: int) -> str:
         return self.etq_corta[tipo]
