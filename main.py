@@ -1,8 +1,10 @@
 import sys
-from cubo import *
-from problemaRubik import *
-from busqueda import *
-from problema import *
+from cubo import Cubo
+from problemaRubik import EstadoRubik
+from busquedaAnchura import BusquedaAnchura
+from busquedaProfundidad import BusquedaProfundidad
+from problema import Problema
+
 
 cubo = Cubo()
 
