@@ -44,5 +44,5 @@ class Problema:
 
     # Aplica el método de Busqueda de este Problema concreto para resolverlo.
     # Devuelve la lista de Operadores que permiten alcanzar un Estado final desde el Estado inicial del Problema
-    def obtenerSolucion(self) -> list["Operador"]:
-        return self.buscador.buscarSolucion(self.inicial)
+    def obtenerSolucion(self, timeAmount: int = 60) -> list["Operador"]:
+        return self.buscador.buscarSolucion(self.inicial, timeAmount)

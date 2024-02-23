@@ -24,7 +24,6 @@ class Busqueda(metaclass=ABCMeta):
         self.inicial = inicial
         self.timeAmount = timeAmount
         self.tiempoInicio = time.time()
-        print(self.tiempoInicio)
         toret = self.solveProblem()
 
         toret["time"] = time.time() - self.tiempoInicio
@@ -43,6 +42,7 @@ class Busqueda(metaclass=ABCMeta):
                 -'solution': A list with the solution to the problem
                 -'lenOpen': An integer with the length of the open list
                 -'lenClose': An integer with the length of the closed list
+                -'lenSolution': An integer with the length of the solution
 
         """
         pass

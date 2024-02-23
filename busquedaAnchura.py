@@ -1,5 +1,6 @@
 from nodos import NodoAnchura
 from busqueda import Busqueda
+import time
 
 
 # Implementa una búsqueda en Anchura genérica (independiente de Estados y Operadores) controlando repetición de estados.
@@ -10,15 +11,20 @@ class BusquedaAnchura(Busqueda):
     def solveProblem(self):
         nodoActual = None
         actual, hijo = None, None
-        solution = False
+        solutionFlag = False
         abiertos = []
         cerrados = dict()
         abiertos.append(NodoAnchura(self.inicial, None, None))
-        while not solution and len(abiertos) > 0:
+
+        while (
+            not solutionFlag
+            and len(abiertos) > 0
+            and time.time() - self.tiempoInicio < self.timeAmount
+        ):
             nodoActual = abiertos.pop(0)
             actual = nodoActual.estado
             if actual.esFinal():
-                solution = True
+                solutionFlag = True
             else:
                 # cerrados[actual.cubo.visualizar()] = nodoActual
                 for operador in actual.operadoresAplicables():
@@ -28,16 +34,21 @@ class BusquedaAnchura(Busqueda):
                         cerrados[hijo.cubo.visualizar()] = (
                             hijo  # utilizamos CERRADOS para mantener también traza de los nodos añadidos a ABIERTOS
                         )
-        if solution:
-            toret = {
-                "solution": [],
-                "lenOpen": len(abiertos),
-                "lenClose": len(cerrados),
-            }
+
+        toret = {
+            "lenOpen": len(abiertos),
+            "lenClose": len(cerrados),
+        }
+
+        if solutionFlag:
+            toret["solution"] = []
             nodo = nodoActual
             while nodo.padre != None:  # Asciende hasta la raíz
                 toret["solution"].insert(0, nodo.operador)
                 nodo = nodo.padre
-            return toret
+            toret["lenSolution"] = len(toret["solution"])
         else:
-            return None
+            toret["solution"] = None
+            toret["lenSolution"] = float("inf")
+
+        return toret

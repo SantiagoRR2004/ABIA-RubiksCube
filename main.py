@@ -34,7 +34,7 @@ problema = Problema(EstadoRubik(cubo), BusquedaAnchura())
 print("SOLUCION:")
 opsSolucion = problema.obtenerSolucion()
 
-if opsSolucion != None:
+if opsSolucion["solution"] != None:
     for o in opsSolucion["solution"]:
         print(cubo.visualizarMovimiento(o.getEtiqueta()) + " ")
         cubo.mover(o.movimiento)
@@ -42,3 +42,7 @@ if opsSolucion != None:
     print("CUBO FINAL:\n" + cubo.visualizar())
 else:
     print("no se ha encontrado solución")
+
+
+print(f"Time taken: {opsSolucion['time']:.2f} seconds")
+print(opsSolucion)
