@@ -35,7 +35,7 @@ print("SOLUCION:")
 opsSolucion = problema.obtenerSolucion()
 
 if opsSolucion != None:
-    for o in opsSolucion:
+    for o in opsSolucion["solution"]:
         print(cubo.visualizarMovimiento(o.getEtiqueta()) + " ")
         cubo.mover(o.movimiento)
     print()

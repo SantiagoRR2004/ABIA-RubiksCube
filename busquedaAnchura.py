@@ -7,18 +7,18 @@ from busqueda import Busqueda
 class BusquedaAnchura(Busqueda):
 
     # Implementa la búsqueda en anchura. Si encuentra solución recupera la lista de Operadores empleados almacenada en los atributos de los objetos NodoAnchura
-    def buscarSolucion(self, inicial):
+    def solveProblem(self):
         nodoActual = None
         actual, hijo = None, None
-        solucion = False
+        solution = False
         abiertos = []
         cerrados = dict()
-        abiertos.append(NodoAnchura(inicial, None, None))
-        while not solucion and len(abiertos) > 0:
+        abiertos.append(NodoAnchura(self.inicial, None, None))
+        while not solution and len(abiertos) > 0:
             nodoActual = abiertos.pop(0)
             actual = nodoActual.estado
             if actual.esFinal():
-                solucion = True
+                solution = True
             else:
                 # cerrados[actual.cubo.visualizar()] = nodoActual
                 for operador in actual.operadoresAplicables():
@@ -28,12 +28,16 @@ class BusquedaAnchura(Busqueda):
                         cerrados[hijo.cubo.visualizar()] = (
                             hijo  # utilizamos CERRADOS para mantener también traza de los nodos añadidos a ABIERTOS
                         )
-        if solucion:
-            lista = []
+        if solution:
+            toret = {
+                "solution": [],
+                "lenOpen": len(abiertos),
+                "lenClose": len(cerrados),
+            }
             nodo = nodoActual
             while nodo.padre != None:  # Asciende hasta la raíz
-                lista.insert(0, nodo.operador)
+                toret["solution"].insert(0, nodo.operador)
                 nodo = nodo.padre
-            return lista
+            return toret
         else:
             return None
