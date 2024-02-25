@@ -7,43 +7,59 @@ from busquedaProfundidadIterativa import BusquedaProfundidadIterativa
 from problema import Problema
 
 
-cubo = Cubo()
+def multipleSearches(algorithms: dict, numMovs: int = 1, maxTime: int = 60) -> dict:
+    """
+    Args:
+        -algorithms: dict. A dictionary with the algorithms to use
+        -numMovs: int. The number of movements to shuffle the cube
+        -maxTime: int. The maximum amount of time to solve the problem
 
-# print("CUBO SIN MEZCLAR:\n" + cubo.visualizar())
+    Returns:
+        -dict. A dictionary with the results of the searches
+        as the keys the names of the algorithms and as the values
+        the results of the searches
+    """
+    cubo = Cubo()
+    movsMezcla = cubo.mezclar(numMovs)
+    toret = {}
 
-# Mover frontal face
-# cubo.mover(cubo.F)
+    for name, algorithm in algorithms.items():
+        newCube = Cubo()
+        for movement in movsMezcla:
+            newCube.mover(movement)
+        problem = Problema(EstadoRubik(newCube), algorithm)
+        solution = problem.obtenerSolucion(maxTime)
+        toret[name] = solution
+    return toret
 
-# print("CUBO resultado del movimiento F:\n" + cubo.visualizar())
 
-movs = 3
-if len(sys.argv) > 1:
-    movs = int(sys.argv[1])
+if __name__ == "__main__":
+    movs = 2
+    if len(sys.argv) > 1:
+        movs = int(sys.argv[1])
 
-movsMezcla = cubo.mezclar(movs)
+    opsSolucion = multipleSearches(
+        {
+            "Anchura": BusquedaAnchura(),
+            "Profundidad": BusquedaProfundidad(),
+            "ProfundidadIterativa": BusquedaProfundidadIterativa(),
+        },
+        movs,
+    )
 
-print("MOVIMIENTOS ALEATORIOS:", movs)
-for m in movsMezcla:
-    print(cubo.visualizarMovimiento(m) + " ")
-print()
+    maxLength = max([len(x) for x in opsSolucion.keys()])
 
-# print("CUBO INICIAL (MEZCLADO):\n" + cubo.visualizar())
-
-# Creación de un problema
-problema = Problema(EstadoRubik(cubo), BusquedaProfundidadIterativa())
-
-print("SOLUCION:")
-opsSolucion = problema.obtenerSolucion()
-
-if opsSolucion["solution"] != None:
-    for o in opsSolucion["solution"]:
-        print(cubo.visualizarMovimiento(o.getEtiqueta()) + " ")
-        cubo.mover(o.movimiento)
+    for name, solution in opsSolucion.items():
+        if solution["solution"] != None:
+            print(
+                f"{name}{' '*(maxLength-len(name))} managed to solve it in {solution['lenSolution']} steps"
+            )
+        else:
+            print(
+                f"{name}{' '*(maxLength-len(name))} couldn't solve it in the given time"
+            )
     print()
-    print("CUBO FINAL:\n" + cubo.visualizar())
-else:
-    print("no se ha encontrado solución")
-
-
-print(f"Time taken: {opsSolucion['time']:.2f} seconds")
-print(opsSolucion)
+    for name, solution in opsSolucion.items():
+        print(
+            f"{name}{' '*(maxLength-len(name))} lasted {solution['time']:.2f} seconds"
+        )
