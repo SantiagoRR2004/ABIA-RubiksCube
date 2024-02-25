@@ -7,7 +7,6 @@ class BusquedaProfundidad(Busqueda):
 
     # Implementa la búsqueda en profundidad. Si encuentra solución recupera la lista de Operadores empleados almacenada en los atributos de los objetos NodoProfundidad
     def solveProblem(self):
-        solucion = False
         nodoActual = None
         actual, hijo = None, None
         solutionFlag = False
@@ -16,7 +15,7 @@ class BusquedaProfundidad(Busqueda):
         abiertos.append(NodoAnchura(self.inicial, None, None))
 
         while (
-            not solucion
+            not solutionFlag
             and len(abiertos) > 0
             and time.time() - self.tiempoInicio < self.timeAmount
         ):
@@ -25,7 +24,7 @@ class BusquedaProfundidad(Busqueda):
             nodoActual = abiertos.pop(-1)
             actual = nodoActual.estado
             if actual.esFinal():
-                solucion = True
+                solutionFlag = True
             else:
                 # cerrados[actual.cubo.visualizar()] = nodoActual
                 for operador in actual.operadoresAplicables():
