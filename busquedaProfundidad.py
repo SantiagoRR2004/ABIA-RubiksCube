@@ -7,6 +7,7 @@ class BusquedaProfundidad(Busqueda):
 
     # Implementa la búsqueda en profundidad. Si encuentra solución recupera la lista de Operadores empleados almacenada en los atributos de los objetos NodoProfundidad
     def solveProblem(self):
+        solucion = False
         nodoActual = None
         actual, hijo = None, None
         solutionFlag = False

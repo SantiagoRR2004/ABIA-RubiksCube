@@ -3,6 +3,7 @@ from cubo import Cubo
 from problemaRubik import EstadoRubik
 from busquedaAnchura import BusquedaAnchura
 from busquedaProfundidad import BusquedaProfundidad
+from busquedaProfundidadIterativa import BusquedaProfundidadIterativa
 from problema import Problema
 
 
@@ -29,7 +30,7 @@ print()
 # print("CUBO INICIAL (MEZCLADO):\n" + cubo.visualizar())
 
 # Creación de un problema
-problema = Problema(EstadoRubik(cubo), BusquedaAnchura())
+problema = Problema(EstadoRubik(cubo), BusquedaProfundidadIterativa())
 
 print("SOLUCION:")
 opsSolucion = problema.obtenerSolucion()
