@@ -36,8 +36,8 @@ class BusquedaProfundidad(Busqueda):
                         )
 
         toret = {
-            "lenOpen": len(abiertos),
-            "lenClose": len(cerrados),
+            "lenOpened": len(abiertos),
+            "lenClosed": len(cerrados),
         }
 
         if solutionFlag:

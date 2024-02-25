@@ -40,8 +40,8 @@ class Busqueda(metaclass=ABCMeta):
             -Dict. A dictionary with the following keys:
 
                 -'solution': A list with the solution to the problem
-                -'lenOpen': An integer with the length of the open list
-                -'lenClose': An integer with the length of the closed list
+                -'lenOpened': An integer with the length of the open list
+                -'lenClosed': An integer with the length of the closed list
                 -'lenSolution': An integer with the length of the solution
 
         """

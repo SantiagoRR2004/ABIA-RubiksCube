@@ -1,5 +1,5 @@
 from problema import Operador, Estado
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 
 if TYPE_CHECKING:
@@ -34,6 +34,11 @@ class EstadoRubik(Estado):
 
     def equals(self, e: "EstadoRubik") -> bool:
         return self.cubo.equals(e.cubo)
+
+    def __eq__(self, other: Any) -> bool:
+        if isinstance(other, EstadoRubik):
+            return self.equals(other)
+        return False
 
 
 # Implementa el interfaz Operador encapsulando un movimiento (giro) Rubik

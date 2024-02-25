@@ -41,8 +41,8 @@ class BusquedaAnchura(Busqueda):
                         # utilizamos CERRADOS para mantener también traza de los nodos añadidos a ABIERTOS
 
         toret = {
-            "lenOpen": len(abiertos),
-            "lenClose": len(cerrados) - len(abiertos),
+            "lenOpened": len(abiertos),
+            "lenClosed": max(0, len(cerrados) - len(abiertos)),
         }
 
         if solutionFlag:
