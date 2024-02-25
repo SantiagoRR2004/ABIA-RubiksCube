@@ -6,11 +6,12 @@ import time
 # Implementa una búsqueda en Anchura genérica (independiente de Estados y Operadores) controlando repetición de estados.
 # Usa lista ABIERTOS (lista) y lista CERRADOS (diccionario usando Estado como clave)
 class BusquedaAnchura(Busqueda):
+    # https://en.wikipedia.org/wiki/Breadth-first_search
 
-    # Implementa la búsqueda en anchura. Si encuentra solución recupera la lista de Operadores empleados almacenada en los atributos de los objetos NodoAnchura
+    # Implementa la búsqueda en anchura.
+    # Si encuentra solución recupera la lista de Operadores
+    # empleados almacenada en los atributos de los objetos NodoAnchura
     def solveProblem(self):
-        nodoActual = self.inicial
-        hijo = None
         solutionFlag = False
         abiertos = []
         cerrados = set()  # We change it to a set of representations of the states,
