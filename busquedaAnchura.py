@@ -9,12 +9,16 @@ class BusquedaAnchura(Busqueda):
 
     # Implementa la búsqueda en anchura. Si encuentra solución recupera la lista de Operadores empleados almacenada en los atributos de los objetos NodoAnchura
     def solveProblem(self):
-        nodoActual = None
-        actual, hijo = None, None
+        nodoActual = self.inicial
+        hijo = None
         solutionFlag = False
         abiertos = []
-        cerrados = dict()
+        cerrados = []  # We change it to a list of representations of the states,
+        # this way we don't store the whole state
         abiertos.append(NodoAnchura(self.inicial, None, None))
+        nodoActual = abiertos[0]
+        if nodoActual.estado.esFinal():
+            solutionFlag = True
 
         while (
             not solutionFlag
@@ -22,22 +26,23 @@ class BusquedaAnchura(Busqueda):
             and time.time() - self.tiempoInicio < self.timeAmount
         ):
             nodoActual = abiertos.pop(0)
-            actual = nodoActual.estado
-            if actual.esFinal():
-                solutionFlag = True
-            else:
-                # cerrados[actual.cubo.visualizar()] = nodoActual
-                for operador in actual.operadoresAplicables():
-                    hijo = actual.aplicarOperador(operador)
-                    if hijo.cubo.visualizar() not in cerrados.keys():
+            for operador in nodoActual.estado.operadoresAplicables():
+                hijo = nodoActual.estado.aplicarOperador(operador)
+
+                if hijo.cubo.visualizar() not in cerrados:
+                    if hijo.esFinal():
+                        nodoActual = NodoAnchura(hijo, nodoActual, operador)
+                        solutionFlag = True
+                        break  # I don't like this but it is faster
+
+                    else:
                         abiertos.append(NodoAnchura(hijo, nodoActual, operador))
-                        cerrados[hijo.cubo.visualizar()] = (
-                            hijo  # utilizamos CERRADOS para mantener también traza de los nodos añadidos a ABIERTOS
-                        )
+                        cerrados.append(hijo.cubo.visualizar())
+                        # utilizamos CERRADOS para mantener también traza de los nodos añadidos a ABIERTOS
 
         toret = {
             "lenOpen": len(abiertos),
-            "lenClose": len(cerrados),
+            "lenClose": len(cerrados) - len(abiertos),
         }
 
         if solutionFlag:
