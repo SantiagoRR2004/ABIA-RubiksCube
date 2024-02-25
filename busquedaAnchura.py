@@ -13,7 +13,7 @@ class BusquedaAnchura(Busqueda):
         hijo = None
         solutionFlag = False
         abiertos = []
-        cerrados = []  # We change it to a list of representations of the states,
+        cerrados = set()  # We change it to a set of representations of the states,
         # this way we don't store the whole state
         abiertos.append(NodoAnchura(self.inicial, None, None))
         nodoActual = abiertos[0]
@@ -37,7 +37,7 @@ class BusquedaAnchura(Busqueda):
 
                     else:
                         abiertos.append(NodoAnchura(hijo, nodoActual, operador))
-                        cerrados.append(hijo.cubo.visualizar())
+                        cerrados.add(hijo.cubo.visualizar())
                         # utilizamos CERRADOS para mantener también traza de los nodos añadidos a ABIERTOS
 
         toret = {
