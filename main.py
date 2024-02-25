@@ -4,6 +4,7 @@ from problemaRubik import EstadoRubik
 from busquedaAnchura import BusquedaAnchura
 from busquedaProfundidad import BusquedaProfundidad
 from busquedaProfundidadIterativa import BusquedaProfundidadIterativa
+from busquedaProfundidadLimitada import BusquedaProfundidadLimitada
 from problema import Problema
 
 
@@ -43,6 +44,7 @@ if __name__ == "__main__":
             "Anchura": BusquedaAnchura(),
             "Profundidad": BusquedaProfundidad(),
             "ProfundidadIterativa": BusquedaProfundidadIterativa(),
+            "ProfundidadLimitada": BusquedaProfundidadLimitada(),
         },
         movs,
     )
