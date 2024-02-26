@@ -50,7 +50,7 @@ class BusquedaProfundidadIterativa(Busqueda):
 
         return toret
 
-    def solveProblem(self, cota=6):
+    def solveProblem(self, cota=2):
         # cota 7 ya se va a un tiempo de: 900 segundos
         if cota is None:
             return self.profundidad()

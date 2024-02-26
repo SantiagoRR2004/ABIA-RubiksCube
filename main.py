@@ -5,6 +5,7 @@ from busquedaAnchura import BusquedaAnchura
 from busquedaProfundidad import BusquedaProfundidad
 from busquedaProfundidadIterativa import BusquedaProfundidadIterativa
 from busquedaProfundidadLimitada import BusquedaProfundidadLimitada
+from busquedaBidireccional import BusquedaBidireccional
 from problema import Problema
 
 
@@ -45,6 +46,7 @@ if __name__ == "__main__":
             "Profundidad": BusquedaProfundidad(),
             "ProfundidadIterativa": BusquedaProfundidadIterativa(),
             "ProfundidadLimitada": BusquedaProfundidadLimitada(),
+            "Bidireccional": BusquedaBidireccional(),
         },
         movs,
     )
@@ -75,3 +77,12 @@ if __name__ == "__main__":
         print(
             f"{name}{' '*(maxLength-len(name))} length of opened was {solution['lenOpened']}"
         )
+    print()
+    for name, solution in opsSolucion.items():
+        if solution["solution"]:
+            moves = [
+                Cubo().visualizarMovimiento(o.getEtiqueta())
+                for o in solution["solution"]
+            ]
+            moves = [word.ljust(2) for word in moves]
+            print(f"{name}{' '*(maxLength-len(name))} moves were {' '.join(moves)}")

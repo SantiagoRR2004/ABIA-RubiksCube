@@ -15,8 +15,8 @@ class Cara:
         for i in range(0, 9):
             self.casillas.append(Casilla(color, i))
 
-    def equal(self, cara: "Cara") -> bool:
-        for i, c in enumerate(cara):
+    def equals(self, cara: "Cara") -> bool:
+        for i, c in enumerate(cara.casillas):
             if c.color != self.casillas[i].color:
                 return False
         return True

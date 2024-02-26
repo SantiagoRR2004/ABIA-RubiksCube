@@ -52,3 +52,27 @@ class OperadorRubik(Operador):
     # El coste de los giros es siempre 1 (para la búsqueda todos son idénticos)
     def getCoste(self) -> int:
         return 1
+
+    def opposite(self) -> "OperadorRubik":
+        """
+        This method returns the opposite operator of the current one
+        Because the oparator is stored as an integer and the opposites in
+        the cube are like this:
+
+        0 -> 6
+        1 -> 7
+        2 -> 8
+        3 -> 9
+        4 -> 10
+        5 -> 11
+
+        we only need to add or substract 6
+        to the current operator to get the opposite
+
+        Returns:
+            -OperadorRubik. The opposite of the current operator
+        """
+        if self.movimiento < 6:
+            return self.__class__(abs(self.movimiento + 6))
+        else:
+            return self.__class__(abs(self.movimiento - 6))
