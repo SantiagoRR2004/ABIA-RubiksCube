@@ -6,10 +6,8 @@ if TYPE_CHECKING:
     from problemaRubik import EstadoRubik, OperadorRubik
     from cubo import Cubo
 
-
 # Objeto que implementa la interfaz Estado para un cubo Rubik concreto.
 # La mayor parte de los métodos definidos en el interfaz Estado se delegan en el objeto Cubo.
-
 
 class EstadoRubik(Estado):
 
@@ -34,6 +32,20 @@ class EstadoRubik(Estado):
 
     def equals(self, e: "EstadoRubik") -> bool:
         return self.cubo.equals(e.cubo)
+    
+    def getNumEnFinal(self) -> int:
+        """
+        Función para la heurística
+        Compara el color que tiene que tener cada cara con el color que tiene cada casilla en esa cara.
+        Si coincide, está en su posición final y suma 1.
+        Finalmente, devuelve el numero de casillas que estan en su lugar.
+        """
+        n = 0
+        for c in self.caras:
+            for n in c.casillas:
+                if n.color == c.color:
+                    n += 1
+        return n
 
     def __eq__(self, other: Any) -> bool:
         if isinstance(other, EstadoRubik):
