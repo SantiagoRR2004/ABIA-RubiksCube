@@ -23,11 +23,13 @@ class BusquedaProfundidadLimitada(Busqueda):
                 or None if the solution is not found in the time limit
         """
         visited.add(node.estado.cubo.visualizar())
+        self.lenClosed[0] += 1
 
         if node.estado.esFinal():
             return node
 
         elif time.time() - self.tiempoInicio > self.timeAmount or number == 0:
+            visited.remove(node.estado.cubo.visualizar())
             return None
 
         for operator in node.estado.operadoresAplicables():
@@ -38,19 +40,21 @@ class BusquedaProfundidadLimitada(Busqueda):
                 )
                 if result or (time.time() - self.tiempoInicio > self.timeAmount):
                     return result
+
+        visited.remove(node.estado.cubo.visualizar())
         return None
 
     def solveProblem(self):
         cerrados = set()
-        cerrados.add(NodoAnchura(self.inicial, None, None))
         number = 26  # 26 is the maximum number of movements to solve the cube
         # Second link in this file
+        self.lenClosed = [0]
 
         solution = self.ldfs(NodoAnchura(self.inicial, None, None), cerrados, number)
 
         toret = {
             "lenOpened": 0,
-            "lenClosed": len(cerrados),
+            "lenClosed": self.lenClosed[0],
         }
 
         if solution:
