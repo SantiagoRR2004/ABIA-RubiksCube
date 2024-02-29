@@ -1,67 +1,60 @@
 from nodos import NodoAnchura
 from busqueda import Busqueda
 import time
-import traceback
 
 
 class BusquedaProfundidad(Busqueda):
     # https://en.wikipedia.org/wiki/Depth-first_search
 
-    def dfs(self, node: NodoAnchura, visited: set[NodoAnchura]) -> NodoAnchura:
-        """
-        This is a recursive implementation of the depth first search
-
-        Args:
-            -node: NodoAnchura. The node to start the search from
-            -visited: set[NodoAnchura]. The set of visited nodes
-
-        Returns:
-            -NodoAnchura. The node that is the solution
-                or None if the solution is not found in the time limit
-        """
-        visited.add(node.estado.cubo.visualizar())
-
-        if node.estado.esFinal():
-            return node
-
-        elif time.time() - self.tiempoInicio > self.timeAmount:
-            return None
-
-        if len(traceback.extract_stack()) > 100:
-            """
-            This is not supposed to be in a dfs
-            but we use it to avoid:
-            RecursionError: maximum recursion depth exceeded in comparison
-            This should be used properly
-            in the limited depth search
-            """
-            return None
-
-        for operator in node.estado.operadoresAplicables():
-            hijo = node.estado.aplicarOperador(operator)
-            if hijo.cubo.visualizar() not in visited:
-                result = self.dfs(NodoAnchura(hijo, node, operator), visited)
-                if result or (time.time() - self.tiempoInicio > self.timeAmount):
-                    return result
-        return None
-
-    # Implementa la búsqueda en profundidad.
-    # Si encuentra solución recupera la lista de Operadores empleados
-    # almacenada en los atributos de los objetos NodoProfundidad
     def solveProblem(self):
-        cerrados = set()
-        cerrados.add(NodoAnchura(self.inicial, None, None))
+        """
+        In the end we couldn't use recursion
+        because if we change the recursion limit
+        with sys.setrecursionlimit(2**31 - 1)
+        sometimes the program ends without any output
+        and giving no error.
 
-        solution = self.dfs(NodoAnchura(self.inicial, None, None), cerrados)
+        If we use recursion, we would need to choose an arbitrary
+        limit and we already have a limited depth search.
+
+        The correct way of doing it recursively is similar
+        to the limited depth search. We just need to ignore
+        the number of moves allowed and not remove closed
+        nodes from the set of closed nodes.
+        """
+
+        cerrados = set()
+        solutionFlag = False
+        abiertos = []
+        abiertos.append(NodoAnchura(self.inicial, None, None))
+
+        while (
+            not solutionFlag
+            and len(abiertos) > 0
+            and time.time() - self.tiempoInicio < self.timeAmount
+        ):
+            nodoActual = abiertos.pop()
+
+            if nodoActual.estado.esFinal():
+                solutionFlag = True
+
+            else:
+                for operador in nodoActual.estado.operadoresAplicables():
+                    hijo = nodoActual.estado.aplicarOperador(operador)
+
+                    if hijo.cubo.visualizar() not in cerrados:
+
+                        abiertos.append(NodoAnchura(hijo, nodoActual, operador))
+                        cerrados.add(hijo.cubo.visualizar())
 
         toret = {
-            "lenOpened": 0,
-            "lenClosed": len(cerrados),
+            "lenOpened": len(abiertos),
+            "lenClosed": max(0, len(cerrados) - len(abiertos)),
         }
 
-        if solution:
+        if solutionFlag:
             toret["solution"] = []
-            nodo = solution
+            nodo = nodoActual
             while nodo.padre != None:  # Asciende hasta la raíz
                 toret["solution"].insert(0, nodo.operador)
                 nodo = nodo.padre
