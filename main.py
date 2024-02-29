@@ -45,6 +45,7 @@ if __name__ == "__main__":
             "Anchura": BusquedaAnchura(),
             "Profundidad": BusquedaProfundidad(),
             "ProfundidadIterativa": BusquedaProfundidadIterativa(),
+            "ProfundidadIterativa2": BusquedaProfundidadIterativa(2),
             "ProfundidadLimitada": BusquedaProfundidadLimitada(),
             "Bidireccional": BusquedaBidireccional(),
         },
