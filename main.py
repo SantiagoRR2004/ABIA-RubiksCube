@@ -7,6 +7,7 @@ from busquedaProfundidadIterativa import BusquedaProfundidadIterativa
 from busquedaProfundidadLimitada import BusquedaProfundidadLimitada
 from busquedaBidireccional import BusquedaBidireccional
 from busquedaSimpleHillClimbing import BusquedaSimpleHillClimbing
+from busquedaSteepestHillClimbing import BusquedaSteepestHillClimbing
 from problema import Problema
 
 
@@ -50,6 +51,9 @@ if __name__ == "__main__":
             "ProfundidadLimitada": BusquedaProfundidadLimitada(),
             "Bidireccional": BusquedaBidireccional(),
             "AscensoColinaSimple1": BusquedaSimpleHillClimbing(
+                EstadoRubik.matchingFaceColor
+            ),
+            "AscensoColinaAscensoPronunciado1": BusquedaSteepestHillClimbing(
                 EstadoRubik.matchingFaceColor
             ),
         },

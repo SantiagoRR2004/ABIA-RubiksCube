@@ -5,7 +5,7 @@ from cubo import Cubo
 from problemaRubik import EstadoRubik
 
 
-class BusquedaSimpleHillClimbing(Busqueda):
+class BusquedaSteepestHillClimbing(Busqueda):
     # https://en.wikipedia.org/wiki/Hill_climbing
 
     def __init__(self, heuristic):
@@ -36,7 +36,6 @@ class BusquedaSimpleHillClimbing(Busqueda):
                         nodoActual = NodoAnchura(estadoHijo, nodoActual, operador)
                         heuristicValue = abs(self.heuristic(estadoHijo) - bestValue)
                         foundNext = True
-                        break  # Es lo unico que cambia con respecto a la busquedaSteepestHillClimbing
 
                 if not foundNext:
                     stuckFlag = True
