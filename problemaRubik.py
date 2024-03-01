@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 # Objeto que implementa la interfaz Estado para un cubo Rubik concreto.
 # La mayor parte de los métodos definidos en el interfaz Estado se delegan en el objeto Cubo.
 
+
 class EstadoRubik(Estado):
 
     def __init__(self, cubo: "Cubo") -> None:
@@ -32,7 +33,7 @@ class EstadoRubik(Estado):
 
     def equals(self, e: "EstadoRubik") -> bool:
         return self.cubo.equals(e.cubo)
-    
+
     def getNumEnFinal(self) -> int:
         """
         Función para la heurística
@@ -41,9 +42,9 @@ class EstadoRubik(Estado):
         Finalmente, devuelve el numero de casillas que estan en su lugar.
         """
         n = 0
-        for c in self.caras:
-            for n in c.casillas:
-                if n.color == c.color:
+        for cara in self.cubo.caras:
+            for casilla in cara.casillas:
+                if casilla.color == cara.color:
                     n += 1
         return n
 

@@ -6,6 +6,7 @@ from busquedaProfundidad import BusquedaProfundidad
 from busquedaProfundidadIterativa import BusquedaProfundidadIterativa
 from busquedaProfundidadLimitada import BusquedaProfundidadLimitada
 from busquedaBidireccional import BusquedaBidireccional
+from busquedaSimpleHillClimbing import BusquedaSimpleHillClimbing
 from problema import Problema
 
 
@@ -48,6 +49,9 @@ if __name__ == "__main__":
             "ProfundidadIterativa2": BusquedaProfundidadIterativa(2),
             "ProfundidadLimitada": BusquedaProfundidadLimitada(),
             "Bidireccional": BusquedaBidireccional(),
+            "AscensoColinaSimple": BusquedaSimpleHillClimbing(
+                EstadoRubik.getNumEnFinal
+            ),
         },
         movs,
     )
