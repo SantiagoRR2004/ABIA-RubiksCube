@@ -49,8 +49,8 @@ if __name__ == "__main__":
             "ProfundidadIterativa2": BusquedaProfundidadIterativa(2),
             "ProfundidadLimitada": BusquedaProfundidadLimitada(),
             "Bidireccional": BusquedaBidireccional(),
-            "AscensoColinaSimple": BusquedaSimpleHillClimbing(
-                EstadoRubik.getNumEnFinal
+            "AscensoColinaSimple1": BusquedaSimpleHillClimbing(
+                EstadoRubik.matchingFaceColor
             ),
         },
         movs,

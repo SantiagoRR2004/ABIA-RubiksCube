@@ -34,7 +34,7 @@ class EstadoRubik(Estado):
     def equals(self, e: "EstadoRubik") -> bool:
         return self.cubo.equals(e.cubo)
 
-    def getNumEnFinal(self) -> int:
+    def matchingFaceColor(self) -> int:
         """
         Función para la heurística
         Compara el color que tiene que tener cada cara con el color que tiene cada casilla en esa cara.
