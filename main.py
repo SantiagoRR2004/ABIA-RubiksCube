@@ -1,13 +1,7 @@
 import sys
 from cubo import Cubo
+from busquedas import allSearchTypes
 from problemaRubik import EstadoRubik
-from busquedaAnchura import BusquedaAnchura
-from busquedaProfundidad import BusquedaProfundidad
-from busquedaProfundidadIterativa import BusquedaProfundidadIterativa
-from busquedaProfundidadLimitada import BusquedaProfundidadLimitada
-from busquedaBidireccional import BusquedaBidireccional
-from busquedaSimpleHillClimbing import BusquedaSimpleHillClimbing
-from busquedaSteepestHillClimbing import BusquedaSteepestHillClimbing
 from problema import Problema
 
 
@@ -42,23 +36,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         movs = int(sys.argv[1])
 
-    opsSolucion = multipleSearches(
-        {
-            "Anchura": BusquedaAnchura(),
-            "Profundidad": BusquedaProfundidad(),
-            "ProfundidadIterativa": BusquedaProfundidadIterativa(),
-            "ProfundidadIterativa2": BusquedaProfundidadIterativa(2),
-            "ProfundidadLimitada": BusquedaProfundidadLimitada(),
-            "Bidireccional": BusquedaBidireccional(),
-            "AscensoColinaSimple1": BusquedaSimpleHillClimbing(
-                EstadoRubik.matchingFaceColor
-            ),
-            "AscensoColinaAscensoPronunciado1": BusquedaSteepestHillClimbing(
-                EstadoRubik.matchingFaceColor
-            ),
-        },
-        movs,
-    )
+    opsSolucion = multipleSearches(allSearchTypes(), movs)
 
     maxLength = max([len(x) for x in opsSolucion.keys()])
 
