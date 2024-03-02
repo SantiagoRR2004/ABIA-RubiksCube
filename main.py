@@ -3,9 +3,12 @@ from cubo import Cubo
 from busquedas import allSearchTypes
 from problemaRubik import EstadoRubik
 from problema import Problema
+from typing import List, Tuple
 
 
-def multipleSearches(algorithms: dict, numMovs: int = 1, maxTime: int = 60) -> dict:
+def multipleSearches(
+    algorithms: dict, numMovs: int = 1, maxTime: int = 60
+) -> Tuple[dict, List[int]]:
     """
     Args:
         -algorithms: dict. A dictionary with the algorithms to use
@@ -16,6 +19,7 @@ def multipleSearches(algorithms: dict, numMovs: int = 1, maxTime: int = 60) -> d
         -dict. A dictionary with the results of the searches
         as the keys the names of the algorithms and as the values
         the results of the searches
+        -List[int]. A list with the movements that were made to shuffle the cube
     """
     cubo = Cubo()
     movsMezcla = cubo.mezclar(numMovs)
@@ -28,7 +32,7 @@ def multipleSearches(algorithms: dict, numMovs: int = 1, maxTime: int = 60) -> d
         problem = Problema(EstadoRubik(newCube), algorithm)
         solution = problem.obtenerSolucion(maxTime)
         toret[name] = solution
-    return toret
+    return toret, movsMezcla
 
 
 if __name__ == "__main__":
@@ -36,7 +40,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         movs = int(sys.argv[1])
 
-    opsSolucion = multipleSearches(allSearchTypes(), movs)
+    opsSolucion, moves = multipleSearches(allSearchTypes(), movs)
 
     maxLength = max([len(x) for x in opsSolucion.keys()])
 
