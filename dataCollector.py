@@ -26,12 +26,17 @@ def createRow(nMovs) -> dict:
         as the keys the names of the algorithms and as the values
         the results of the searches
     """
-    toret, moves = multipleSearches(allSearchTypes(), nMovs, calculateTime(nMovs))
-    newtoret = {"moves": moves, "maxTime": calculateTime(nMovs)}
-    for name, value in toret.items():
-        for name2, value2 in value.items():
-            if name2 != "solution":
-                newtoret[name + name2] = value2
+    toret, moves = multipleSearches(
+        allSearchTypes(), nMovs, calculateTime(nMovs), "data.csv"
+    )
+    if toret:  # If the movements have been made before
+        newtoret = {"moves": moves, "maxTime": calculateTime(nMovs)}
+        for name, value in toret.items():
+            for name2, value2 in value.items():
+                if name2 != "solution":
+                    newtoret[name + name2] = value2
+    else:
+        newtoret = {}
 
     return newtoret
 
@@ -93,4 +98,5 @@ if __name__ == "__main__":
         data = createRow(nMovs)
         with open(nameFile, "a", newline="") as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writerow(data)
+            if data:
+                writer.writerow(data)

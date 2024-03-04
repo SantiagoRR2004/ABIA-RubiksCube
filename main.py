@@ -1,19 +1,21 @@
-import sys
+import sys, csv
 from cubo import Cubo
 from busquedas import allSearchTypes
 from problemaRubik import EstadoRubik
 from problema import Problema
 from typing import List, Tuple
+import ast
 
 
 def multipleSearches(
-    algorithms: dict, numMovs: int = 1, maxTime: int = 60
+    algorithms: dict, numMovs: int = 1, maxTime: int = 60, fileToCheck: str = None
 ) -> Tuple[dict, List[int]]:
     """
     Args:
         -algorithms: dict. A dictionary with the algorithms to use
         -numMovs: int. The number of movements to shuffle the cube
         -maxTime: int. The maximum amount of time to solve the problem
+        -fileToCheck: str. The name of the file to check if the movements have been made before
 
     Returns:
         -dict. A dictionary with the results of the searches
@@ -23,6 +25,15 @@ def multipleSearches(
     """
     cubo = Cubo()
     movsMezcla = cubo.mezclar(numMovs)
+    if fileToCheck:
+        with open(fileToCheck, "r") as csvfile:
+            reader = csv.DictReader(csvfile)
+            olderMoves = [
+                ast.literal_eval(x["moves"]) for x in reader if x["moves"] != ""
+            ]
+        if movsMezcla in olderMoves:
+            return {}, movsMezcla
+
     toret = {}
 
     for name, algorithm in algorithms.items():
