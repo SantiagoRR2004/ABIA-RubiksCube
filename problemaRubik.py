@@ -57,13 +57,19 @@ class EstadoRubik(Estado):
         """
         Función para la heurística
         Calcula la distancia de manhattan de cada casilla a su posición final.
+
+        # https://www.cs.princeton.edu/courses/archive/fall06/cos402/papers/korfrubik.pdf
+        En la página 2 abajo a la derecha se explica esta heurística.
+
+        Cogemos el máximo de del numero de movimientos de las aristas/4 y las esquinas/4
+        porque es lo que pone en el paper.
         """
 
-        colors = {"W": 0, "Y": 1, "O": 2, "R": 3, "G": 4, "B": 5}
-        rcolors = {v: k for k, v in colors.items()}
+        oppositeColors = {0: 5, 1: 3, 2: 4, 3: 1, 4: 2, 5: 0}
+
+        movesCorners = 0
 
         # Each corner has the face and then the number on the face
-
         corners = [
             [(0, 0), (1, 0), (4, 2)],
             [(0, 2), (3, 2), (4, 0)],
@@ -76,17 +82,115 @@ class EstadoRubik(Estado):
         ]
 
         for corner in corners:
-            a = rcolors[self.cubo.caras[corner[0][0]].casillas[corner[0][1]].color]
-            b = rcolors[self.cubo.caras[corner[1][0]].casillas[corner[1][1]].color]
-            c = rcolors[self.cubo.caras[corner[2][0]].casillas[corner[2][1]].color]
-            print(f"corner: {a}{b}{c}")
+            a = self.cubo.caras[corner[0][0]].casillas[corner[0][1]].color
+            b = self.cubo.caras[corner[1][0]].casillas[corner[1][1]].color
+            c = self.cubo.caras[corner[2][0]].casillas[corner[2][1]].color
 
-        # Así encontramos las esquinas W
-        # for cara in self.cubo.caras:
-        #     for casilla in cara.casillas:
-        #         # print(casilla.posicionCorrecta, casilla.color)
-        #         if casilla.color == colors["W"] and casilla.posicionCorrecta in [0,2,6,8]:
-        #             print("found a W corner")
+        """
+        I am going to explain how to calculate the minimum number of movements
+        to place an edge in its correct position
+
+        Any edge can be in 24 different positions+orientations but we
+        can divide this number into 4 groups. Once the edge fits 
+        in one of these groups it isn't added to the next 
+        groups even if it fits in them too.
+
+        The first group is the one where at least one of the colors
+        of the edge lays with its face color. This group has 7.
+
+        The second group is the one where at least one of the colors
+        of the edge lays with the color of the face of the other color
+        of the edge. This group has 7.
+
+        The third group is the one where at least one of the colors
+        of the edge lays with its inversed face color. This group has 5.
+
+        The final group is the one where at least one of the colors
+        of the edge lays with the inverse color of the face of the other color
+        of the edge. This group has 5.
+
+        All add up to 24.
+
+        So let us call a to the a color of the edge and b to the other.
+        We will call A to the color of the face of a and B to the color
+        of the face of b. And A' and B' to the inverse colors of A and B.
+
+        The following has been tested by using a real cube.
+
+        When a∈A:
+            -If b∈B:        0 movements
+            -If b∈B':       2 movements
+            -Else:          1 movement
+
+        When a∈B:
+            -If b∈A:        3 movements
+            -If b∈A':       3 movements
+            -Else:          2 movements
+
+        When a∈A':
+            -If b∈B:        2 movements     # Equivalent to a∈A and b∈B'
+            -If b∈B':       4 movements
+            -Else:          3 movements
+
+
+        When a∈B': # This is going to be an else
+            -If b∈A:        3 movements     # Equivalent to a∈B and b∈A'
+            -If b∈A':       3 movements
+            -Else:          2 movements
+
+        """
+        movesEdges = 0
+
+        edgesPositions = [
+            [(0, 1), (4, 7)],
+            [(0, 3), (1, 2)],
+            [(0, 5), (3, 2)],
+            [(0, 7), (2, 2)],
+            [(1, 5), (2, 3)],
+            [(2, 5), (3, 3)],
+            [(3, 5), (4, 3)],
+            [(4, 5), (1, 3)],
+            [(5, 1), (2, 7)],
+            [(5, 3), (1, 7)],
+            [(5, 5), (3, 7)],
+            [(5, 7), (4, 7)],
+        ]
+
+        for edge in edgesPositions:
+            a = self.cubo.caras[edge[0][0]].casillas[edge[0][1]].color
+            b = self.cubo.caras[edge[1][0]].casillas[edge[1][1]].color
+            A = self.cubo.caras[edge[0][0]].color
+            B = self.cubo.caras[edge[1][0]].color
+
+            if a == A or b == B:
+                if a == A and b == B:
+                    movesEdges += 0
+                elif a == oppositeColors[A] or b == oppositeColors[B]:
+                    movesEdges += 2
+                else:
+                    movesEdges += 1
+
+            elif a == B or b == A:
+                if a == B and b == A:
+                    movesEdges += 3
+                elif a == oppositeColors[B] or b == oppositeColors[A]:
+                    movesEdges += 3
+                else:
+                    movesEdges += 2
+
+            elif a == oppositeColors[A] or b == oppositeColors[B]:
+                if a == oppositeColors[A] and b == oppositeColors[B]:
+                    movesEdges += 4
+                else:
+                    movesEdges += 3
+
+            else:
+                if a == oppositeColors[B] and b == oppositeColors[A]:
+                    movesEdges += 3
+                else:
+                    movesEdges += 2
+
+        return max(movesCorners / 4, movesEdges / 4)
 
 
 # Implementa el interfaz Operador encapsulando un movimiento (giro) Rubik
@@ -131,5 +235,6 @@ if __name__ == "__main__":
 
     c = Cubo()
     e = EstadoRubik(c)
+    c.mezclar(1)
     print(c.visualizar())
     print(e.manhattanDistance())
