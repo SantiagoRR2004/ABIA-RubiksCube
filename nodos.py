@@ -18,7 +18,7 @@ class Nodo:
 # Usado para simplificar la reconstrucción del camino solución.
 
 
-class NodoAnchura(Nodo):
+class NodoNoInformado(Nodo):
     def __init__(self, estado: "Estado", padre: "Nodo", operador: "Operador") -> None:
         super().__init__(estado, padre)
         self.operador = operador

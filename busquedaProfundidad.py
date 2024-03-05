@@ -1,4 +1,4 @@
-from nodos import NodoAnchura
+from nodos import NodoNoInformado
 from busqueda import Busqueda
 import time
 
@@ -26,7 +26,7 @@ class BusquedaProfundidad(Busqueda):
         cerrados = set()
         solutionFlag = False
         abiertos = []
-        abiertos.append(NodoAnchura(self.inicial, None, None))
+        abiertos.append(NodoNoInformado(self.inicial, None, None))
 
         while (
             not solutionFlag
@@ -44,7 +44,7 @@ class BusquedaProfundidad(Busqueda):
 
                     if hijo.cubo.visualizar() not in cerrados:
 
-                        abiertos.append(NodoAnchura(hijo, nodoActual, operador))
+                        abiertos.append(NodoNoInformado(hijo, nodoActual, operador))
                         cerrados.add(hijo.cubo.visualizar())
 
         toret = {

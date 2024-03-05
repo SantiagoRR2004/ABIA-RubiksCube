@@ -1,4 +1,4 @@
-from nodos import NodoAnchura
+from nodos import NodoNoInformado
 from busqueda import Busqueda
 from cubo import Cubo
 from problemaRubik import EstadoRubik
@@ -12,10 +12,10 @@ class BusquedaBidireccional(Busqueda):
         solutionFlag = False
 
         fowardOpened = []
-        fowardOpened.append(NodoAnchura(self.inicial, None, None))
+        fowardOpened.append(NodoNoInformado(self.inicial, None, None))
 
         backwardOpened = []
-        backwardOpened.append(NodoAnchura(EstadoRubik(Cubo()), None, None))
+        backwardOpened.append(NodoNoInformado(EstadoRubik(Cubo()), None, None))
 
         closed = set()
         closed.add(self.inicial.cubo.visualizar())
@@ -38,7 +38,7 @@ class BusquedaBidireccional(Busqueda):
 
                 if descendant in [x.estado for x in backwardOpened]:
                     solutionNodes = {
-                        "front": NodoAnchura(descendant, fowardNode, operador),
+                        "front": NodoNoInformado(descendant, fowardNode, operador),
                         "back": [
                             x
                             for x in backwardOpened
@@ -50,7 +50,9 @@ class BusquedaBidireccional(Busqueda):
                     break
 
                 elif descendant.cubo.visualizar() not in closed:
-                    fowardOpened.append(NodoAnchura(descendant, fowardNode, operador))
+                    fowardOpened.append(
+                        NodoNoInformado(descendant, fowardNode, operador)
+                    )
                     closed.add(descendant.cubo.visualizar())
 
             if not solutionFlag:
@@ -63,14 +65,14 @@ class BusquedaBidireccional(Busqueda):
                             "front": [
                                 x for x in fowardOpened if x.estado == descendant
                             ][0],
-                            "back": NodoAnchura(descendant, backwardNode, operador),
+                            "back": NodoNoInformado(descendant, backwardNode, operador),
                         }
                         solutionFlag = True
                         break
 
                     elif descendant.cubo.visualizar() not in closed:
                         backwardOpened.append(
-                            NodoAnchura(descendant, backwardNode, operador)
+                            NodoNoInformado(descendant, backwardNode, operador)
                         )
                         closed.add(descendant.cubo.visualizar())
 

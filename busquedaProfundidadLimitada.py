@@ -1,4 +1,4 @@
-from nodos import NodoAnchura
+from nodos import NodoNoInformado
 from busqueda import Busqueda
 import time
 
@@ -8,8 +8,8 @@ class BusquedaProfundidadLimitada(Busqueda):
     # https://cube20.org/qtm/
 
     def ldfs(
-        self, node: NodoAnchura, visited: set[NodoAnchura], number: int
-    ) -> NodoAnchura:
+        self, node: NodoNoInformado, visited: set[NodoNoInformado], number: int
+    ) -> NodoNoInformado:
         """
         This is a recursive implementation of the limited depth first search
 
@@ -36,7 +36,7 @@ class BusquedaProfundidadLimitada(Busqueda):
             hijo = node.estado.aplicarOperador(operator)
             if hijo.cubo.visualizar() not in visited:
                 result = self.ldfs(
-                    NodoAnchura(hijo, node, operator), visited, number - 1
+                    NodoNoInformado(hijo, node, operator), visited, number - 1
                 )
                 if result or (time.time() - self.tiempoInicio > self.timeAmount):
                     return result
@@ -50,7 +50,9 @@ class BusquedaProfundidadLimitada(Busqueda):
         # Second link in this file
         self.lenClosed = [0]
 
-        solution = self.ldfs(NodoAnchura(self.inicial, None, None), cerrados, number)
+        solution = self.ldfs(
+            NodoNoInformado(self.inicial, None, None), cerrados, number
+        )
 
         toret = {
             "lenOpened": 0,

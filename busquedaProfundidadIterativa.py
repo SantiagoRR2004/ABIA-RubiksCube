@@ -1,4 +1,4 @@
-from nodos import NodoAnchura
+from nodos import NodoNoInformado
 from busqueda import Busqueda
 import time
 
@@ -16,8 +16,8 @@ class BusquedaProfundidadIterativa(Busqueda):
         self.step = step
 
     def ldfs(
-        self, node: NodoAnchura, visited: set[NodoAnchura], number: int
-    ) -> NodoAnchura:
+        self, node: NodoNoInformado, visited: set[NodoNoInformado], number: int
+    ) -> NodoNoInformado:
         """
         This is the same as the ./busquedaProfundidadLimitada.py file
         """
@@ -35,7 +35,7 @@ class BusquedaProfundidadIterativa(Busqueda):
             hijo = node.estado.aplicarOperador(operator)
             if hijo.cubo.visualizar() not in visited:
                 result = self.ldfs(
-                    NodoAnchura(hijo, node, operator), visited, number - 1
+                    NodoNoInformado(hijo, node, operator), visited, number - 1
                 )
                 if result or (time.time() - self.tiempoInicio > self.timeAmount):
                     return result
@@ -51,7 +51,7 @@ class BusquedaProfundidadIterativa(Busqueda):
         while time.time() - self.tiempoInicio < self.timeAmount and not solution:
             cerrados = set()
             solution = self.ldfs(
-                NodoAnchura(self.inicial, None, None), cerrados, maxDepth
+                NodoNoInformado(self.inicial, None, None), cerrados, maxDepth
             )
             maxDepth += self.step
 

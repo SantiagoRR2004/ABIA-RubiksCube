@@ -5,6 +5,7 @@ from busquedaProfundidadLimitada import BusquedaProfundidadLimitada
 from busquedaBidireccional import BusquedaBidireccional
 from busquedaSimpleHillClimbing import BusquedaSimpleHillClimbing
 from busquedaSteepestHillClimbing import BusquedaSteepestHillClimbing
+from busquedaVoraz import BusquedaVoraz
 from problemaRubik import EstadoRubik
 
 
@@ -29,5 +30,6 @@ def allSearchTypes() -> dict:
         "AscensoColinaAscensoPronunciado1": BusquedaSteepestHillClimbing(
             EstadoRubik.matchingFaceColor
         ),
+        "Voraz1": BusquedaVoraz(EstadoRubik.matchingFaceColor),
     }
     return toret

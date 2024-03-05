@@ -1,4 +1,4 @@
-from nodos import NodoAnchura
+from nodos import NodoNoInformado
 from busqueda import Busqueda
 import time
 
@@ -16,7 +16,7 @@ class BusquedaAnchura(Busqueda):
         abiertos = []
         cerrados = set()  # We change it to a set of representations of the states,
         # this way we don't store the whole state
-        abiertos.append(NodoAnchura(self.inicial, None, None))
+        abiertos.append(NodoNoInformado(self.inicial, None, None))
         nodoActual = abiertos[0]
         if nodoActual.estado.esFinal():
             solutionFlag = True
@@ -32,12 +32,12 @@ class BusquedaAnchura(Busqueda):
 
                 if hijo.cubo.visualizar() not in cerrados:
                     if hijo.esFinal():
-                        nodoActual = NodoAnchura(hijo, nodoActual, operador)
+                        nodoActual = NodoNoInformado(hijo, nodoActual, operador)
                         solutionFlag = True
                         break  # I don't like this but it is faster
 
                     else:
-                        abiertos.append(NodoAnchura(hijo, nodoActual, operador))
+                        abiertos.append(NodoNoInformado(hijo, nodoActual, operador))
                         cerrados.add(hijo.cubo.visualizar())
                         # utilizamos CERRADOS para mantener también traza de los nodos añadidos a ABIERTOS
 

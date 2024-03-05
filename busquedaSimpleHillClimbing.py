@@ -1,4 +1,4 @@
-from nodos import NodoAnchura
+from nodos import NodoNoInformado
 from busqueda import Busqueda
 import time
 from cubo import Cubo
@@ -16,7 +16,7 @@ class BusquedaSimpleHillClimbing(Busqueda):
         bestValue = self.heuristic(EstadoRubik(Cubo()))
         solutionFlag = False
         stuckFlag = False
-        nodoActual = NodoAnchura(self.inicial, None, None)
+        nodoActual = NodoNoInformado(self.inicial, None, None)
         heuristicValue = abs(self.heuristic(nodoActual.estado) - bestValue)
 
         while (
@@ -33,7 +33,7 @@ class BusquedaSimpleHillClimbing(Busqueda):
                     estadoHijo = nodoActual.estado.aplicarOperador(operador)
 
                     if abs(self.heuristic(estadoHijo) - bestValue) < heuristicValue:
-                        nodoActual = NodoAnchura(estadoHijo, nodoActual, operador)
+                        nodoActual = NodoNoInformado(estadoHijo, nodoActual, operador)
                         heuristicValue = abs(self.heuristic(estadoHijo) - bestValue)
                         foundNext = True
                         break  # Es lo unico que cambia con respecto a la busquedaSteepestHillClimbing
