@@ -53,6 +53,41 @@ class EstadoRubik(Estado):
             return self.equals(other)
         return False
 
+    def manhattanDistance(self) -> int:
+        """
+        Función para la heurística
+        Calcula la distancia de manhattan de cada casilla a su posición final.
+        """
+
+        colors = {"W": 0, "Y": 1, "O": 2, "R": 3, "G": 4, "B": 5}
+        rcolors = {v: k for k, v in colors.items()}
+
+        # Each corner has the face and then the number on the face
+
+        corners = [
+            [(0, 0), (1, 0), (4, 2)],
+            [(0, 2), (3, 2), (4, 0)],
+            [(0, 6), (1, 2), (2, 0)],
+            [(0, 8), (2, 2), (3, 0)],
+            [(5, 0), (1, 8), (2, 6)],
+            [(5, 2), (2, 8), (3, 6)],
+            [(5, 6), (1, 6), (4, 8)],
+            [(5, 8), (3, 8), (4, 6)],
+        ]
+
+        for corner in corners:
+            a = rcolors[self.cubo.caras[corner[0][0]].casillas[corner[0][1]].color]
+            b = rcolors[self.cubo.caras[corner[1][0]].casillas[corner[1][1]].color]
+            c = rcolors[self.cubo.caras[corner[2][0]].casillas[corner[2][1]].color]
+            print(f"corner: {a}{b}{c}")
+
+        # Así encontramos las esquinas W
+        # for cara in self.cubo.caras:
+        #     for casilla in cara.casillas:
+        #         # print(casilla.posicionCorrecta, casilla.color)
+        #         if casilla.color == colors["W"] and casilla.posicionCorrecta in [0,2,6,8]:
+        #             print("found a W corner")
+
 
 # Implementa el interfaz Operador encapsulando un movimiento (giro) Rubik
 class OperadorRubik(Operador):
@@ -89,3 +124,12 @@ class OperadorRubik(Operador):
             return self.__class__(abs(self.movimiento + 6))
         else:
             return self.__class__(abs(self.movimiento - 6))
+
+
+if __name__ == "__main__":
+    from cubo import Cubo
+
+    c = Cubo()
+    e = EstadoRubik(c)
+    print(c.visualizar())
+    print(e.manhattanDistance())
