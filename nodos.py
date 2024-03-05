@@ -48,7 +48,6 @@ class NodoInformado(NodoNoInformado):
         super().__init__(estado, padre, operador)
         self.coste = coste
         self.heuristica = heuristica
-        self.total = coste + heuristica
 
     def getHeuristica(self) -> float:
         """
@@ -56,3 +55,36 @@ class NodoInformado(NodoNoInformado):
             -float. The heuristic of the node
         """
         return self.heuristica
+
+    def getCoste(self) -> float:
+        """
+        This method returns the cost of the node up
+        to the root node. It doesn't return the cost
+        of tha last action.
+
+        Returns:
+            -float. The cost of the node
+        """
+        if self.padre == None:
+            return self.coste
+        return self.coste + self.padre.getCoste()
+
+    def getTotal(self) -> float:
+        """
+        Returns:
+            -float. The total cost of the node
+        """
+        return self.getCoste() + self.getHeuristica()
+
+    def changeFather(self, newFather: "NodoInformado", newOperator: "Operador") -> None:
+        """
+        Args:
+            -newFather: NodoInformado. The new father of the node
+            -newOperator: Operador. The operator used to generate the state
+            from the new father to the node
+
+        Returns:
+            -None
+        """
+        self.padre = newFather
+        self.operador = newOperator
