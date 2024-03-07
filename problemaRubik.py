@@ -53,46 +53,14 @@ class EstadoRubik(Estado):
             return self.equals(other)
         return False
 
-    def manhattanDistance(self) -> int:
-        """
-        Función para la heurística
-        Calcula la distancia de manhattan de cada casilla a su posición final.
-
-        # https://www.cs.princeton.edu/courses/archive/fall06/cos402/papers/korfrubik.pdf
-        En la página 2 abajo a la derecha se explica esta heurística.
-
-        Cogemos el máximo de del numero de movimientos de las aristas/4 y las esquinas/4
-        porque es lo que pone en el paper.
-        """
-
-        oppositeColors = {0: 5, 1: 3, 2: 4, 3: 1, 4: 2, 5: 0}
-
-        movesCorners = 0
-
-        # Each corner has the face and then the number on the face
-        corners = [
-            [(0, 0), (1, 0), (4, 2)],
-            [(0, 2), (3, 2), (4, 0)],
-            [(0, 6), (1, 2), (2, 0)],
-            [(0, 8), (2, 2), (3, 0)],
-            [(5, 0), (1, 8), (2, 6)],
-            [(5, 2), (2, 8), (3, 6)],
-            [(5, 6), (1, 6), (4, 8)],
-            [(5, 8), (3, 8), (4, 6)],
-        ]
-
-        for corner in corners:
-            a = self.cubo.caras[corner[0][0]].casillas[corner[0][1]].color
-            b = self.cubo.caras[corner[1][0]].casillas[corner[1][1]].color
-            c = self.cubo.caras[corner[2][0]].casillas[corner[2][1]].color
-
+    def getMovesEdges(self) -> int:
         """
         I am going to explain how to calculate the minimum number of movements
         to place an edge in its correct position
 
         Any edge can be in 24 different positions+orientations but we
-        can divide this number into 4 groups. Once the edge fits 
-        in one of these groups it isn't added to the next 
+        can divide this number into 4 groups. Once the edge fits
+        in one of these groups it isn't added to the next
         groups even if it fits in them too.
 
         The first group is the one where at least one of the colors
@@ -139,21 +107,22 @@ class EstadoRubik(Estado):
             -Else:          2 movements
 
         """
+        oppositeColors = {0: 5, 1: 3, 2: 4, 3: 1, 4: 2, 5: 0}
         movesEdges = 0
 
         edgesPositions = [
-            [(0, 1), (4, 7)],
-            [(0, 3), (1, 2)],
-            [(0, 5), (3, 2)],
-            [(0, 7), (2, 2)],
-            [(1, 5), (2, 3)],
-            [(2, 5), (3, 3)],
-            [(3, 5), (4, 3)],
-            [(4, 5), (1, 3)],
-            [(5, 1), (2, 7)],
-            [(5, 3), (1, 7)],
-            [(5, 5), (3, 7)],
-            [(5, 7), (4, 7)],
+            [(0, 1), (4, 1)],
+            [(0, 7), (1, 1)],
+            [(0, 3), (3, 1)],
+            [(0, 5), (2, 1)],
+            [(1, 3), (2, 7)],
+            [(2, 3), (3, 7)],
+            [(3, 3), (4, 7)],
+            [(4, 3), (1, 7)],
+            [(5, 1), (2, 5)],
+            [(5, 7), (1, 5)],
+            [(5, 3), (3, 5)],
+            [(5, 5), (4, 5)],
         ]
 
         for edge in edgesPositions:
@@ -190,7 +159,133 @@ class EstadoRubik(Estado):
                 else:
                     movesEdges += 2
 
-        return max(movesCorners / 4, movesEdges / 4)
+        return movesEdges
+
+    def getMovesCorners(self) -> int:
+        """
+        I am going to explain how to calculate the minimum number of movements
+        to place a corner in its correct position. Then we add up all the
+        movements of all the corners.
+
+        Any corner can be in 8 positions and 3 orientations giving
+        a total of 24 different positions+orientations. The 3 colors
+        of the corner are a, b and c. Their correspondant faces are A, B and C.
+        And the opposite faces are A', B' and C'. Here we have
+        the 24 different positions+orientations:
+
+        a∈A     b∈B     c∈C         0 movements
+        a∈A     b∈C     c∈B'        1 movement
+        a∈A     b∈B'    c∈C'        2 movements
+        a∈A     b∈C'    c∈B         1 movement
+
+        a∈A'    b∈B     c∈C'        2 movements
+        a∈A'    b∈C     c∈B         3 movements
+        a∈A'    b∈B'    c∈C         2 movements
+        a∈A'    b∈C'    c∈B'        3 movements
+
+        a∈B     b∈C'    c∈A'        2 movements
+        a∈B     b∈A     c∈C'        3 movements
+        a∈B     b∈C     c∈A         2 movements
+        a∈B     b∈A'    c∈C         1 movement
+
+        a∈B'    b∈A     c∈C         1 movement
+        a∈B'    b∈C'    c∈A         2 movements
+        a∈B'    b∈A'    c∈C'        3 movements
+        a∈B'    b∈C     c∈A'        2 movements
+
+        a∈C     b∈B     c∈A'        1 movement
+        a∈C     b∈A     c∈B         2 movements
+        a∈C     b∈B'    c∈A         3 movements
+        a∈C     b∈A'    c∈B'        2 movements
+
+        a∈C'    b∈B     c∈A         1 movement
+        a∈C'    b∈A     c∈B'        2 movements
+        a∈C'    b∈B'    c∈A'        3 movements
+        a∈C'    b∈A'    c∈B         2 movements
+
+
+        So we can combine this into 3 groups
+        if we eliminate the possibility of entering
+        the next group. The groups are the following:
+
+        The first one has 10 positions+orientations
+        and at least one is in its face color.
+
+        When a∈A:
+            -If b∈B:        0 movements
+            -If b∈B':       2 movements
+            -Else:          1 movement
+
+
+        The second one has 6 positions+orientations
+        and at least one is in its opposite color.
+
+        When a∈A':      3 movements
+
+
+        The last one has 8 positions+orientations
+        and is the rest. All have 2 movements.
+        """
+
+        oppositeColors = {0: 5, 1: 3, 2: 4, 3: 1, 4: 2, 5: 0}
+
+        movesCorners = 0
+
+        # Each corner has the face and then the number on the face
+        corners = [
+            [(0, 0), (1, 0), (4, 2)],
+            [(0, 2), (3, 2), (4, 0)],
+            [(0, 6), (1, 2), (2, 0)],
+            [(0, 4), (2, 2), (3, 0)],
+            [(5, 0), (1, 4), (2, 6)],
+            [(5, 2), (2, 4), (3, 6)],
+            [(5, 6), (1, 6), (4, 4)],
+            [(5, 4), (3, 4), (4, 6)],
+        ]
+
+        for corner in corners:
+            a = self.cubo.caras[corner[0][0]].casillas[corner[0][1]].color
+            b = self.cubo.caras[corner[1][0]].casillas[corner[1][1]].color
+            c = self.cubo.caras[corner[2][0]].casillas[corner[2][1]].color
+            A = self.cubo.caras[corner[0][0]].color
+            B = self.cubo.caras[corner[1][0]].color
+            C = self.cubo.caras[corner[2][0]].color
+
+            if a == A or b == B or c == C:
+                if a == A and b == B and c == C:
+                    movesCorners += 0
+                elif (
+                    a == oppositeColors[A]
+                    or b == oppositeColors[B]
+                    or c == oppositeColors[C]
+                ):
+                    movesCorners += 2
+                else:
+                    movesCorners += 1
+            elif (
+                a == oppositeColors[A]
+                or b == oppositeColors[B]
+                or c == oppositeColors[C]
+            ):
+                movesCorners += 3
+            else:
+                movesCorners += 2
+
+        return movesCorners
+
+    def manhattanDistance(self) -> int:
+        """
+        Función para la heurística
+        Calcula la distancia de manhattan de cada casilla a su posición final.
+
+        # https://www.cs.princeton.edu/courses/archive/fall06/cos402/papers/korfrubik.pdf
+        En la página 2 abajo a la derecha se explica esta heurística.
+
+        Cogemos el máximo de del numero de movimientos de las aristas/4 y las esquinas/4
+        porque es lo que pone en el paper.
+        """
+
+        return max(self.getMovesCorners() / 4, self.getMovesEdges() / 4)
 
 
 # Implementa el interfaz Operador encapsulando un movimiento (giro) Rubik
@@ -228,13 +323,3 @@ class OperadorRubik(Operador):
             return self.__class__(abs(self.movimiento + 6))
         else:
             return self.__class__(abs(self.movimiento - 6))
-
-
-if __name__ == "__main__":
-    from cubo import Cubo
-
-    c = Cubo()
-    e = EstadoRubik(c)
-    c.mezclar(1)
-    print(c.visualizar())
-    print(e.manhattanDistance())
