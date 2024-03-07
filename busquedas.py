@@ -26,12 +26,12 @@ def allSearchTypes() -> dict:
         "ProfundidadLimitada": BusquedaProfundidadLimitada(),
         "Bidireccional": BusquedaBidireccional(),
         "AscensoColinaSimple1": BusquedaSimpleHillClimbing(
-            EstadoRubik.matchingFaceColor
+            EstadoRubik.matchingCorrectPosition
         ),
         "AscensoColinaAscensoPronunciado1": BusquedaSteepestHillClimbing(
-            EstadoRubik.matchingFaceColor
+            EstadoRubik.matchingCorrectPosition
         ),
-        "Voraz1": BusquedaVoraz(EstadoRubik.matchingFaceColor),
-        "AStar1": BusquedaAStar(EstadoRubik.matchingFaceColor),
+        "Voraz1": BusquedaVoraz(EstadoRubik.matchingCorrectPosition),
+        "AStar1": BusquedaAStar(EstadoRubik.matchingCorrectPosition),
     }
     return toret

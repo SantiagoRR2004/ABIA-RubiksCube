@@ -39,12 +39,27 @@ class EstadoRubik(Estado):
         Función para la heurística
         Compara el color que tiene que tener cada cara con el color que tiene cada casilla en esa cara.
         Si coincide, está en su posición final y suma 1.
-        Finalmente, devuelve el numero de casillas que estan en su lugar.
+        Finalmente, devuelve el numero de casillas que estan en su cara correcta.
         """
         n = 0
         for cara in self.cubo.caras:
             for casilla in cara.casillas:
                 if casilla.color == cara.color:
+                    n += 1
+        return n
+
+    def matchingCorrectPosition(self) -> int:
+        """
+        Función para la heurística
+        Compara si una casilla está en la cara correcta y en su posición adecuada.
+        Si es el caso, suma 1
+        Finalmente, obtenemos el número de casillas bien colocadas
+        """
+        n = 0
+        for cara in self.cubo.caras:
+            for i in range(0, 9):
+                casilla = cara.casillas[i]
+                if casilla.color == cara.color and casilla.posicionCorrecta == i:
                     n += 1
         return n
 
@@ -323,3 +338,12 @@ class OperadorRubik(Operador):
             return self.__class__(abs(self.movimiento + 6))
         else:
             return self.__class__(abs(self.movimiento - 6))
+
+if __name__ == "__main__":
+    from cubo import Cubo
+
+    c = Cubo()
+    e = EstadoRubik(c)
+    c.mezclar(1)
+    print(c.visualizar())
+    print(e.matchingCorrectPosition())
