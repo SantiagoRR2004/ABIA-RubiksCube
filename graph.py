@@ -53,7 +53,7 @@ if __name__ == "__main__":
                 [
                     float(x[key])
                     for x in data
-                    if len(ast.literal_eval(x["moves"])) == num
+                    if len(ast.literal_eval(x["moves"])) == num and x[key] != ""
                 ]
             )
             avgData[num][key] = number
@@ -69,6 +69,7 @@ if __name__ == "__main__":
                             for x in data
                             if len(ast.literal_eval(x["moves"])) == num
                             and x[algo + "lenSolution"] != "inf"
+                            and x[key] != ""
                         ]
                     )
                     avgDataFinish[num][key] = number
@@ -83,7 +84,68 @@ if __name__ == "__main__":
                     )
                     avgDataFinish[num][key] = number
 
-    typesOfGraphs = {"": avgData, " (Solved)": avgDataFinish}
+    # Now we add the minimum number of moves to the data
+    attribute = "lenSolution"
+    for row in data:
+        lenSolutions = [
+            value
+            for key, value in row.items()
+            if key[-len(attribute) :] == attribute and value != ""
+        ]
+        lenSolutions = [float(x) for x in lenSolutions] + [
+            len(ast.literal_eval(row["moves"]))
+        ]
+        row["lenMinSolution"] = int(min(lenSolutions))
+
+    # We create the numbers
+    nMinMovs = set([row["lenMinSolution"] for row in data])
+
+    # We create the average by the minimum number of moves to solve
+    avgMinData = {x: {} for x in nMinMovs}
+    for num in avgMinData.keys():
+        for key in fieldnames:
+            number = np.mean(
+                [
+                    float(x[key])
+                    for x in data
+                    if x["lenMinSolution"] == num and x[key] != ""
+                ]
+            )
+            avgMinData[num][key] = number
+
+    # We create the average by the minimum number of moves to solve with the solved ones
+    avgMinDataFinish = {x: {} for x in nMinMovs}
+    for num in avgMinDataFinish.keys():
+        for algo in allSearchTypes().keys():
+            for key in fieldnames:
+                if key[: len(algo)] == algo:
+                    number = np.mean(
+                        [
+                            float(x[key])
+                            for x in data
+                            if x["lenMinSolution"] == num
+                            and x[algo + "lenSolution"] != "inf"
+                            and x[key] != ""
+                        ]
+                    )
+                    avgMinDataFinish[num][key] = number
+
+                if key == "maxTime":
+                    number = np.mean(
+                        [
+                            float(x[key])
+                            for x in data
+                            if x["lenMinSolution"] == num and x[key] != ""
+                        ]
+                    )
+                    avgMinDataFinish[num][key] = number
+
+    typesOfGraphs = {
+        "": avgData,
+        " (Solved)": avgDataFinish,
+        " (Real)": avgMinData,
+        " (Real and Solved)": avgMinDataFinish,
+    }
 
     variables = [
         {"name": "time", "title": "Time vs Number of moves", "ylabel": "Time (s)"},
