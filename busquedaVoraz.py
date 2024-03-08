@@ -25,6 +25,7 @@ class BusquedaVoraz(Busqueda):
                 abs(self.heuristic(self.inicial) - bestValue),
             )
         )
+        cerrados.add(self.inicial.cubo.visualizar())
 
         while (
             not solutionFlag
