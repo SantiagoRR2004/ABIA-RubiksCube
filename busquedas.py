@@ -6,6 +6,7 @@ from busquedaBidireccional import BusquedaBidireccional
 from busquedaSimpleHillClimbing import BusquedaSimpleHillClimbing
 from busquedaSteepestHillClimbing import BusquedaSteepestHillClimbing
 from busquedaVoraz import BusquedaVoraz
+from busquedaVorazBidireccional import BusquedaVorazBidireccional
 from busquedaAStar import BusquedaAStar
 from problemaRubik import EstadoRubik
 
@@ -28,11 +29,35 @@ def allSearchTypes() -> dict:
         "AscensoColinaSimple1": BusquedaSimpleHillClimbing(
             EstadoRubik.matchingFaceColor
         ),
-        "AscensoColinaAscensoPronunciado1": BusquedaSteepestHillClimbing(
+        "AscensoColinaSimple2": BusquedaSimpleHillClimbing(
+            EstadoRubik.manhattanDistance
+        ),
+        "AscensoColinaSimple3": BusquedaSimpleHillClimbing(
+            EstadoRubik.matchingCorrectPosition
+        ),
+        "AscensoColinaMaximaPendiente1": BusquedaSteepestHillClimbing(
             EstadoRubik.matchingFaceColor
         ),
+        "AscensoColinaMaximaPendiente2": BusquedaSteepestHillClimbing(
+            EstadoRubik.manhattanDistance
+        ),
+        "AscensoColinaMaximaPendiente3": BusquedaSteepestHillClimbing(
+            EstadoRubik.matchingCorrectPosition
+        ),
         "Voraz1": BusquedaVoraz(EstadoRubik.matchingFaceColor),
+        "Voraz2": BusquedaVoraz(EstadoRubik.manhattanDistance),
+        "Voraz3": BusquedaVoraz(EstadoRubik.matchingCorrectPosition),
+        "VorazBidireccional1": BusquedaVorazBidireccional(
+            EstadoRubik.manhattanDistance
+        ),
+        "VorazBidireccional2": BusquedaVorazBidireccional(
+            EstadoRubik.manhattanDistance
+        ),
+        "VorazBidireccional3": BusquedaVorazBidireccional(
+            EstadoRubik.manhattanDistance
+        ),
         "AStar1": BusquedaAStar(EstadoRubik.matchingFaceColor),
+        "AStar2": BusquedaAStar(EstadoRubik.manhattanDistance),
         "AStar3": BusquedaAStar(EstadoRubik.matchingCorrectPosition),
     }
     return toret
