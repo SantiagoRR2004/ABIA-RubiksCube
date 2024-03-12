@@ -51,7 +51,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         movs = int(sys.argv[1])
 
-    opsSolucion, moves = multipleSearches(allSearchTypes(), movs)
+    opsSolucion, moves = multipleSearches(allSearchTypes(), movs, 10)
 
     maxLength = max([len(x) for x in opsSolucion.keys()])
 

@@ -8,6 +8,7 @@ from busquedaSteepestHillClimbing import BusquedaSteepestHillClimbing
 from busquedaVoraz import BusquedaVoraz
 from busquedaVorazBidireccional import BusquedaVorazBidireccional
 from busquedaAStar import BusquedaAStar
+from busquedaIDAStar import BusquedaIDAStar
 from problemaRubik import EstadoRubik
 
 
@@ -59,5 +60,6 @@ def allSearchTypes() -> dict:
         "AStar1": BusquedaAStar(EstadoRubik.matchingFaceColor),
         "AStar2": BusquedaAStar(EstadoRubik.manhattanDistance),
         "AStar3": BusquedaAStar(EstadoRubik.matchingCorrectPosition),
+        "IDA3": BusquedaIDAStar(EstadoRubik.matchingCorrectPosition),
     }
     return toret
