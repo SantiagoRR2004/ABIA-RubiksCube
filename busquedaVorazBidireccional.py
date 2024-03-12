@@ -6,7 +6,6 @@ import time
 
 
 class BusquedaVorazBidireccional(Busqueda):
-    # https://en.wikipedia.org/wiki/Best-first_search
 
     def __init__(self, heuristic):
         self.heuristic = heuristic

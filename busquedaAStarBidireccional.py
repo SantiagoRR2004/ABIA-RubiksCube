@@ -6,7 +6,6 @@ from problemaRubik import EstadoRubik
 
 
 class BusquedaAStarBidireccional(Busqueda):
-    # https://en.wikipedia.org/wiki/A*_search_algorithm
 
     def __init__(self, heuristic) -> None:
         self.heuristic = heuristic
