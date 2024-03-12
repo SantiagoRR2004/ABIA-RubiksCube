@@ -1,4 +1,3 @@
-from collections import deque
 from nodos import NodoInformado
 from busqueda import Busqueda
 import time
@@ -7,25 +6,26 @@ from problemaRubik import EstadoRubik
 
 
 class BusquedaIDAStar(Busqueda):
-    # https://en.wikipedia.org/wiki/Iterative_deepening_depth-first_search
 
     def __init__(self, heuristic) -> None:
         self.heuristic = heuristic
+        self.newCota = 99999
 
     def ldfs(
-        self, node: NodoInformado, cota: int, bestValue: int
+        self, node: NodoInformado, cota: float, bestValue: int
     ) -> NodoInformado:
         f = node.getTotal()
+
         if f > cota:
-            return f
+            if f < self.newCota:
+                self.newCota = f
+            return None
 
         if node.estado.esFinal():
             return node
 
         elif time.time() - self.tiempoInicio > self.timeAmount:
             return None
-        
-        min = 99999
 
         for operator in node.estado.operadoresAplicables():
             hijo = node.estado.aplicarOperador(operator)
@@ -36,39 +36,31 @@ class BusquedaIDAStar(Busqueda):
                 1,
                 abs(self.heuristic(hijo) - bestValue),
             )
-            newNode_cota = newNode.getTotal()
             result = self.ldfs(
                 newNode, cota, bestValue,
             )
-            if type(result) != int or (time.time() - self.tiempoInicio > self.timeAmount):
+            if result or (time.time() - self.tiempoInicio > self.timeAmount):
                 return result
-            elif result < min:
-                min = result
 
-        return min
+        return None
 
     def solveProblem(self):
         bestValue = self.heuristic(EstadoRubik(Cubo()))
-
+        node_initial = NodoInformado(self.inicial, None, None, 1,
+                                     abs(self.heuristic(self.inicial) - bestValue),
+                                    )
         solution = None
-        #path = deque()
-        #path.append()
 
-        cota = abs(self.heuristic(self.inicial) - bestValue)
-        self.lenClosed = [0]
-        while time.time() - self.tiempoInicio < self.timeAmount:
+        self.newCota = node_initial.getTotal()
+
+        while time.time() - self.tiempoInicio < self.timeAmount and not solution:
+            print("iniciamos bucle")
+            cota = self.newCota
+            self.newCota = 99999
+            print("new cota: ", cota)
             solution = self.ldfs(
-                NodoInformado(self.inicial, None, None, 1,
-                abs(self.heuristic(self.inicial) - bestValue),), 
-                cota, bestValue,
+                node_initial, cota, bestValue,
             )
-            if type(solution) == int:
-                if solution == 99999:
-                    solution = None
-                    break
-                cota = solution
-            elif solution.estado.esFinal():
-                break
 
         toret = {
             "lenOpened": 0,
