@@ -54,10 +54,8 @@ class BusquedaIDAStar(Busqueda):
         self.newCota = node_initial.getTotal()
 
         while time.time() - self.tiempoInicio < self.timeAmount and not solution:
-            print("iniciamos bucle")
             cota = self.newCota
             self.newCota = 99999
-            print("new cota: ", cota)
             solution = self.ldfs(
                 node_initial, cota, bestValue,
             )
