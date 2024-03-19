@@ -2,6 +2,7 @@ from abc import abstractmethod
 from abc import ABCMeta
 from typing import TYPE_CHECKING, Dict
 import time
+import tracemalloc
 
 if TYPE_CHECKING:
     from problema import Estado
@@ -18,15 +19,26 @@ class Busqueda(metaclass=ABCMeta):
                 This needs to be implemented in the concrete classes
 
         Returns:
-            -Dict. The dictionary that returns solveProblem()
-                and the time it took to solve the problem
+            -Dict. The dictionary that returns solveProblem(),
+                the time it took to solve the problem
+                and the maximum amount of memory used
         """
         self.inicial = inicial
         self.timeAmount = timeAmount
         self.tiempoInicio = time.time()
+
+        tracemalloc.reset_peak()
+
+        tracemalloc.start()  # Start tracing memory allocations
+
         toret = self.solveProblem()
 
         toret["time"] = time.time() - self.tiempoInicio
+
+        # Get the peak memory usage
+        toret["maxMemory"] = tracemalloc.get_traced_memory()[1]
+
+        tracemalloc.reset_peak()
 
         return toret
 

@@ -60,6 +60,8 @@ def allSearchTypes() -> dict:
         "AStar1": BusquedaAStar(EstadoRubik.matchingFaceColor),
         "AStar2": BusquedaAStar(EstadoRubik.manhattanDistance),
         "AStar3": BusquedaAStar(EstadoRubik.matchingCorrectPosition),
+        "IDAStar1": BusquedaIDAStar(EstadoRubik.matchingFaceColor),
         "IDAStar2": BusquedaIDAStar(EstadoRubik.manhattanDistance),
+        "IDAStar3": BusquedaIDAStar(EstadoRubik.matchingCorrectPosition),
     }
     return toret

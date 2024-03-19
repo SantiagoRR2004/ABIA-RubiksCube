@@ -338,12 +338,3 @@ class OperadorRubik(Operador):
             return self.__class__(abs(self.movimiento + 6))
         else:
             return self.__class__(abs(self.movimiento - 6))
-
-if __name__ == "__main__":
-    from cubo import Cubo
-
-    c = Cubo()
-    e = EstadoRubik(c)
-    c.mezclar(1)
-    print(c.visualizar())
-    print(e.matchingCorrectPosition())

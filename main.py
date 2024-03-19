@@ -64,21 +64,31 @@ if __name__ == "__main__":
             print(
                 f"{name}{' '*(maxLength-len(name))} couldn't solve it in the given time"
             )
+
+    print()
+    for name, solution in opsSolucion.items():
+        print(
+            f"{name}{' '*(maxLength-len(name))} occupied max {solution['maxMemory']} bytes"
+        )
+
     print()
     for name, solution in opsSolucion.items():
         print(
             f"{name}{' '*(maxLength-len(name))} lasted {solution['time']:.2f} seconds"
         )
+
     print()
     for name, solution in opsSolucion.items():
         print(
             f"{name}{' '*(maxLength-len(name))} length of closed was {solution['lenClosed']}"
         )
+
     print()
     for name, solution in opsSolucion.items():
         print(
             f"{name}{' '*(maxLength-len(name))} length of opened was {solution['lenOpened']}"
         )
+
     print()
     for name, solution in opsSolucion.items():
         if solution["solution"]:

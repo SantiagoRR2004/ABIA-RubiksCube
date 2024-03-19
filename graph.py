@@ -164,6 +164,11 @@ if __name__ == "__main__":
             "title": "Solution length vs Number of moves",
             "ylabel": "Number of moves",
         },
+        {
+            "name": "maxMemory",
+            "title": "Memory vs Number of moves",
+            "ylabel": "Memory (bytes)",
+        },
     ]
 
     for key, graph in typesOfGraphs.items():
