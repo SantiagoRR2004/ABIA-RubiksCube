@@ -5,6 +5,16 @@ from problemaRubik import EstadoRubik
 from problema import Problema
 from typing import List, Tuple
 import ast
+from concurrent.futures import ProcessPoolExecutor
+
+
+# Define a function to run the algorithm for a single algorithm
+def run_algorithm(name, algorithm, movsMezcla, maxTime):
+    newCube = Cubo()
+    for movement in movsMezcla:
+        newCube.mover(movement)
+    problem = Problema(EstadoRubik(newCube), algorithm)
+    return problem.obtenerSolucion(maxTime)
 
 
 def multipleSearches(
@@ -36,18 +46,23 @@ def multipleSearches(
 
     toret = {}
 
-    for name, algorithm in algorithms.items():
-        newCube = Cubo()
-        for movement in movsMezcla:
-            newCube.mover(movement)
-        problem = Problema(EstadoRubik(newCube), algorithm)
-        solution = problem.obtenerSolucion(maxTime)
-        toret[name] = solution
+    with ProcessPoolExecutor() as executor:
+        # Submit each algorithm to the executor
+        futures = {
+            executor.submit(run_algorithm, name, algorithm, movsMezcla, maxTime): name
+            for name, algorithm in algorithms.items()
+        }
+
+        # Collect results as they become available
+        for future in futures:
+            name = futures[future]
+            toret[name] = future.result()
+
     return toret, movsMezcla
 
 
 if __name__ == "__main__":
-    movs = 2
+    movs = 1
     if len(sys.argv) > 1:
         movs = int(sys.argv[1])
 

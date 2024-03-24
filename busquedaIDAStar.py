@@ -13,9 +13,7 @@ class BusquedaIDAStar(Busqueda):
         self.lenClosed = 0
         self.lenOpen = 0
 
-    def ldfs(
-        self, node: NodoInformado, cota: float, bestValue: int
-    ) -> NodoInformado:
+    def ldfs(self, node: NodoInformado, cota: float, bestValue: int) -> NodoInformado:
         f = node.getTotal()
 
         if f > cota:
@@ -40,7 +38,9 @@ class BusquedaIDAStar(Busqueda):
                 abs(self.heuristic(hijo) - bestValue),
             )
             result = self.ldfs(
-                newNode, cota, bestValue,
+                newNode,
+                cota,
+                bestValue,
             )
             if result or (time.time() - self.tiempoInicio > self.timeAmount):
                 return result
@@ -51,9 +51,13 @@ class BusquedaIDAStar(Busqueda):
 
     def solveProblem(self):
         bestValue = self.heuristic(EstadoRubik(Cubo()))
-        node_initial = NodoInformado(self.inicial, None, None, 1,
-                                     abs(self.heuristic(self.inicial) - bestValue),
-                                    )
+        node_initial = NodoInformado(
+            self.inicial,
+            None,
+            None,
+            1,
+            abs(self.heuristic(self.inicial) - bestValue),
+        )
         solution = None
 
         self.newCota = node_initial.getTotal()
@@ -64,7 +68,9 @@ class BusquedaIDAStar(Busqueda):
             cota = self.newCota
             self.newCota = float("inf")
             solution = self.ldfs(
-                node_initial, cota, bestValue,
+                node_initial,
+                cota,
+                bestValue,
             )
 
         toret = {

@@ -34,7 +34,7 @@ class BusquedaProfundidadLimitada(Busqueda):
         for operator in node.estado.operadoresAplicables():
             hijo = node.estado.aplicarOperador(operator)
             if hijo.cubo.visualizar() not in visited:
-                self.lenOpen += 1
+                self.lenOpened += 1
                 result = self.ldfs(
                     NodoNoInformado(hijo, node, operator), visited, number - 1
                 )
@@ -42,7 +42,7 @@ class BusquedaProfundidadLimitada(Busqueda):
                     return result
 
         visited.remove(node.estado.cubo.visualizar())
-        self.lenOpen -= 1
+        self.lenOpened -= 1
         self.lenClosed += 1
         return None
 
@@ -51,14 +51,14 @@ class BusquedaProfundidadLimitada(Busqueda):
         number = 26  # 26 is the maximum number of movements to solve the cube
         # Second link in this file
         self.lenClosed = 0
-        self.lenOpen = 0
+        self.lenOpened = 0
 
         solution = self.ldfs(
             NodoNoInformado(self.inicial, None, None), cerrados, number
         )
 
         toret = {
-            "lenOpened": self.lenOpen,
+            "lenOpened": self.lenOpened,
             "lenClosed": self.lenClosed,
         }
 

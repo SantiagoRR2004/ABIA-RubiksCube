@@ -33,14 +33,14 @@ class BusquedaProfundidadIterativa(Busqueda):
         for operator in node.estado.operadoresAplicables():
             hijo = node.estado.aplicarOperador(operator)
             if hijo.cubo.visualizar() not in visited:
-                self.lenOpen += 1
+                self.lenOpened += 1
                 result = self.ldfs(
                     NodoNoInformado(hijo, node, operator), visited, number - 1
                 )
                 if result or (time.time() - self.tiempoInicio > self.timeAmount):
                     return result
-                
-        self.lenOpen -= 1
+
+        self.lenOpened -= 1
         self.lenClosed += 1
 
         visited.remove(node.estado.cubo.visualizar())
@@ -50,9 +50,10 @@ class BusquedaProfundidadIterativa(Busqueda):
         solution = None
 
         maxDepth = 0
+        self.lenClosed = 0
+        self.lenOpened = 0
+
         while time.time() - self.tiempoInicio < self.timeAmount and not solution:
-            self.lenClosed = 0
-            self.lenOpen = 0
             cerrados = set()
             solution = self.ldfs(
                 NodoNoInformado(self.inicial, None, None), cerrados, maxDepth
@@ -60,7 +61,7 @@ class BusquedaProfundidadIterativa(Busqueda):
             maxDepth += self.step
 
         toret = {
-            "lenOpened": self.lenOpen,
+            "lenOpened": self.lenOpened,
             "lenClosed": self.lenClosed,
         }
 
