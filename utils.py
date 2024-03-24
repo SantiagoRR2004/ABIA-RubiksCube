@@ -44,13 +44,30 @@ def multipleSearches(
         if movsMezcla in olderMoves:
             return {}, movsMezcla
 
+    return runAllSearches(movsMezcla, maxTime)
+
+
+def runAllSearches(movsMezcla: list[int], maxTime: int) -> Tuple[dict, List[int]]:
+    """
+    Runs all the searches in parallel
+
+    Args:
+        -movsMezcla: list[int]. A list with the movements to shuffle the cube
+        -maxTime: int. The maximum amount of time to solve the problem
+
+    Returns:
+        -dict. A dictionary with the results of the searches
+        as the keys the names of the algorithms and as the values
+        the results of the searches
+        -List[int]. A list with the movements that were made to shuffle the cube
+    """
     toret = {}
 
     with ProcessPoolExecutor() as executor:
         # Submit each algorithm to the executor
         futures = {
             executor.submit(run_algorithm, name, algorithm, movsMezcla, maxTime): name
-            for name, algorithm in algorithms.items()
+            for name, algorithm in allSearchTypes().items()
         }
 
         # Collect results as they become available
@@ -72,7 +89,7 @@ def calculateTime(nMovs) -> int:
     return 10 * nMovs
 
 
-def createRow(nMovs) -> dict:
+def createRow(nMovs: int, time: int = None, moves=None) -> dict:
     """
     Args:
         -nMovs: int. The number of movements to shuffle the cube
@@ -82,9 +99,14 @@ def createRow(nMovs) -> dict:
         as the keys the names of the algorithms and as the values
         the results of the searches
     """
-    toret, moves = multipleSearches(
-        allSearchTypes(), nMovs, calculateTime(nMovs), "data.csv"
-    )
+    if type(time) != int:
+        time = calculateTime(nMovs)
+
+    if not moves:
+        toret, moves = multipleSearches(allSearchTypes(), nMovs, time, "data.csv")
+    else:
+        toret, moves = runAllSearches(moves, time)
+
     if toret:  # If the movements have been made before
         newtoret = {"moves": moves, "maxTime": calculateTime(nMovs)}
         for name, value in toret.items():
