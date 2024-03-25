@@ -39,3 +39,5 @@ if __name__ == "__main__":
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             if data:
                 writer.writerow(data)
+
+        print(f"Added {nMovs} movements")

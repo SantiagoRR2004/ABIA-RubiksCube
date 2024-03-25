@@ -31,6 +31,7 @@ if __name__ == "__main__":
 
     # Here is where the code changes
     for i in range(numberOfRows):
+        moves = "Not need to refill"
         with open(nameFile, "r", newline="") as file:  # This code is repeated
             reader = csv.DictReader(file)
             oldData = list(reader)

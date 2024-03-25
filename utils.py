@@ -108,7 +108,7 @@ def createRow(nMovs: int, time: int = None, moves=None) -> dict:
         toret, moves = runAllSearches(moves, time)
 
     if toret:  # If the movements have been made before
-        newtoret = {"moves": moves, "maxTime": calculateTime(nMovs)}
+        newtoret = {"moves": moves, "maxTime": time}
         for name, value in toret.items():
             for name2, value2 in value.items():
                 if name2 != "solution":
