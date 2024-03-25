@@ -14,6 +14,7 @@ class BusquedaVorazBidireccional(Busqueda):
         solutionFlag = False
 
         bestValue = self.heuristic(EstadoRubik(Cubo()))
+        bestValueBack = self.heuristic(self.inicial, inv=True, objective=self.inicial)
 
         fowardOpened = []
         fowardOpened.append(
@@ -33,7 +34,12 @@ class BusquedaVorazBidireccional(Busqueda):
                 None,
                 None,
                 0,
-                abs(self.heuristic(EstadoRubik(Cubo())) - bestValue),
+                abs(
+                    self.heuristic(
+                        EstadoRubik(Cubo()), inv=True, objective=self.inicial
+                    )
+                    - bestValueBack
+                ),
             )
         )
 
@@ -108,7 +114,14 @@ class BusquedaVorazBidireccional(Busqueda):
                                 backwardNode,
                                 operador,
                                 0,
-                                abs(self.heuristic(descendant) - bestValue),
+                                abs(
+                                    self.heuristic(
+                                        descendant,
+                                        inv=True,
+                                        objective=self.inicial,
+                                    )
+                                    - bestValueBack
+                                ),
                             ),
                         }
                         solutionFlag = True
@@ -121,7 +134,14 @@ class BusquedaVorazBidireccional(Busqueda):
                                 backwardNode,
                                 operador,
                                 0,
-                                abs(self.heuristic(descendant) - bestValue),
+                                abs(
+                                    self.heuristic(
+                                        descendant,
+                                        inv=True,
+                                        objective=self.inicial,
+                                    )
+                                    - bestValueBack
+                                ),
                             )
                         )
                         closed.add(descendant.cubo.visualizar())
