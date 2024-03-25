@@ -49,13 +49,13 @@ def allSearchTypes() -> dict:
         "Voraz2": BusquedaVoraz(EstadoRubik.manhattanDistance),
         "Voraz3": BusquedaVoraz(EstadoRubik.matchingCorrectPosition),
         "VorazBidireccional1": BusquedaVorazBidireccional(
-            EstadoRubik.manhattanDistance
+            EstadoRubik.matchingFaceColor
         ),
         "VorazBidireccional2": BusquedaVorazBidireccional(
             EstadoRubik.manhattanDistance
         ),
         "VorazBidireccional3": BusquedaVorazBidireccional(
-            EstadoRubik.manhattanDistance
+            EstadoRubik.matchingCorrectPosition
         ),
         "AStar1": BusquedaAStar(EstadoRubik.matchingFaceColor),
         "AStar2": BusquedaAStar(EstadoRubik.manhattanDistance),
