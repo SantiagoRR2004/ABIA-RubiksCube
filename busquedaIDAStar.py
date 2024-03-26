@@ -9,6 +9,10 @@ class BusquedaIDAStar(Busqueda):
 
     def __init__(self, heuristic) -> None:
         self.heuristic = heuristic
+        if self.heuristic.__name__ == 'matchingFaceColor' or self.heuristic.__name__ == 'matchingCorrectPosition':
+            self.coste = 12
+        else:
+            self.coste = 1
         self.newCota = float("inf")
         self.lenClosed = 0
         self.lenOpen = 0
@@ -34,7 +38,7 @@ class BusquedaIDAStar(Busqueda):
                 hijo,
                 node,
                 operator,
-                1,
+                self.coste,
                 abs(self.heuristic(hijo) - bestValue),
             )
             result = self.ldfs(
