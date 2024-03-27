@@ -70,7 +70,7 @@ class EstadoRubik(Estado):
                         n += 1
                         objColors[casilla.color] -= 1
 
-        return n
+        return n / 12
 
     def matchingCorrectPosition(
         self, inv: bool = False, objective: "EstadoRubik" = None
@@ -108,7 +108,7 @@ class EstadoRubik(Estado):
                     ):
                         n += 1
 
-        return n
+        return n/12
 
     def __eq__(self, other: Any) -> bool:
         if isinstance(other, EstadoRubik):
