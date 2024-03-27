@@ -3,6 +3,7 @@ from abc import ABCMeta
 from typing import TYPE_CHECKING, Dict
 import time
 import tracemalloc
+from sympy import symbols, solve, Eq, summation
 
 if TYPE_CHECKING:
     from problema import Estado
@@ -39,6 +40,40 @@ class Busqueda(metaclass=ABCMeta):
         toret["maxMemory"] = tracemalloc.get_traced_memory()[1]
 
         tracemalloc.reset_peak()
+
+        toret["EBF"] = float("inf")
+
+        if toret["lenSolution"] == 0:  # The cube is already solved
+            toret["EBF"] = 0
+
+        elif toret["lenSolution"] < float("inf"):
+            x = symbols("x")
+            n = symbols("n")
+            """
+            ecuation = (
+                (1 - x ** (toret["lenSolution"] + 1)) / (1 - x)
+                - toret["lenOpened"]
+                - toret["lenClosed"]
+            )
+            """
+            ecuation2 = Eq(
+                summation(x**n, (n, 1, toret["lenSolution"])),
+                toret["lenOpened"] + toret["lenClosed"] - 1,
+            )
+
+            solutions = [float(x) for x in solve(ecuation2, x) if x.is_real and x >= 0]
+
+            if len(solutions) != 1:
+                print(
+                    f"Error in EBF calculation: {solutions} \n N = {toret['lenOpened']+toret['lenClosed']} \n p = {toret['lenSolution']}"
+                )
+                if len(solutions) == 0:
+                    toret["EBF"] = None
+                else:
+                    toret["EBF"] = solutions[0]
+
+            else:
+                toret["EBF"] = solutions[0]
 
         return toret
 

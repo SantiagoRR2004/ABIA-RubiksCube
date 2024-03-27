@@ -169,6 +169,11 @@ if __name__ == "__main__":
             "title": "Memory vs Number of moves",
             "ylabel": "Memory (bytes)",
         },
+        {
+            "name": "EBF",
+            "title": "Ramification Factor vs Number of moves",
+            "ylabel": "EBF",
+        },
     ]
 
     for key, graph in typesOfGraphs.items():
