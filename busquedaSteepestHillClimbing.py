@@ -18,6 +18,8 @@ class BusquedaSteepestHillClimbing(Busqueda):
         stuckFlag = False
         nodoActual = NodoNoInformado(self.inicial, None, None)
         heuristicValue = abs(self.heuristic(nodoActual.estado) - bestValue)
+        lenOpened = 1  # El inicial
+        lenClosed = 0
 
         while (
             not solutionFlag
@@ -31,6 +33,7 @@ class BusquedaSteepestHillClimbing(Busqueda):
                 foundNext = False
                 for operador in nodoActual.estado.operadoresAplicables():
                     estadoHijo = nodoActual.estado.aplicarOperador(operador)
+                    lenOpened += 1
 
                     if abs(self.heuristic(estadoHijo) - bestValue) < heuristicValue:
                         nodoActual = NodoNoInformado(estadoHijo, nodoActual, operador)
@@ -38,11 +41,12 @@ class BusquedaSteepestHillClimbing(Busqueda):
                         foundNext = True
 
                 if not foundNext:
+                    lenClosed += 1
                     stuckFlag = True
 
         toret = {
-            "lenOpened": 0,
-            "lenClosed": 0,
+            "lenOpened": lenOpened,
+            "lenClosed": lenClosed,
         }
 
         if solutionFlag:
