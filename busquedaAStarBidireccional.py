@@ -33,7 +33,7 @@ class BusquedaAStarBidireccional(Busqueda):
         solutionFlag = False
 
         bestValue = self.heuristic(EstadoRubik(Cubo()))
-        initialValue = self.heuristic(self.inicial)
+        bestValueBack = self.heuristic(self.inicial, inv=True, objective=self.inicial)
 
         initial = NodoInformado(
             self.inicial,
@@ -48,7 +48,10 @@ class BusquedaAStarBidireccional(Busqueda):
             None,
             None,
             1,
-            abs(self.heuristic(EstadoRubik(Cubo())) - initialValue),
+            abs(
+                self.heuristic(EstadoRubik(Cubo()), inv=True, objective=self.inicial)
+                - bestValueBack
+            ),
         )
 
         fowardOpened = []
@@ -164,7 +167,14 @@ class BusquedaAStarBidireccional(Busqueda):
                             backwardNode,
                             operador,
                             1,
-                            abs(self.heuristic(descendant) - initialValue),
+                            abs(
+                                self.heuristic(
+                                    descendant,
+                                    inv=True,
+                                    objective=self.inicial,
+                                )
+                                - bestValueBack
+                            ),
                         )
                         backwardOpened.append(newNode)
                         backwardClosed.append(newNode)
