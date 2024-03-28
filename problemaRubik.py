@@ -108,7 +108,7 @@ class EstadoRubik(Estado):
                     ):
                         n += 1
 
-        return n/12
+        return n/18
 
     def __eq__(self, other: Any) -> bool:
         if isinstance(other, EstadoRubik):
