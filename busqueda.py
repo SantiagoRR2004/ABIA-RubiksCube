@@ -44,7 +44,7 @@ class Busqueda(metaclass=ABCMeta):
         toret["EBF"] = float("inf")
 
         if toret["lenSolution"] == 0:  # The cube is already solved
-            toret["EBF"] = 0
+            toret["EBF"] = 1
 
         elif toret["lenSolution"] < float("inf"):
             x = symbols("x")
