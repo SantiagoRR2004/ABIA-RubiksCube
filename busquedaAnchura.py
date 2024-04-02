@@ -16,6 +16,7 @@ class BusquedaAnchura(Busqueda):
         abiertos = []
         cerrados = set()  # We change it to a set of representations of the states,
         # this way we don't store the whole state
+        cerrados.add(self.inicial.cubo.visualizar())
         abiertos.append(NodoNoInformado(self.inicial, None, None))
         nodoActual = abiertos[0]
         if nodoActual.estado.esFinal():
