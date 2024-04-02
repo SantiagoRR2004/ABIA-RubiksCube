@@ -18,7 +18,7 @@ class BusquedaSteepestHillClimbing(Busqueda):
         stuckFlag = False
         nodoActual = NodoNoInformado(self.inicial, None, None)
         heuristicValue = abs(self.heuristic(nodoActual.estado) - bestValue)
-        lenOpened = 1  # El inicial
+        lenOpened = 0
         lenClosed = 0
 
         while (
