@@ -40,8 +40,10 @@ class BusquedaSteepestHillClimbing(Busqueda):
                         heuristicValue = abs(self.heuristic(estadoHijo) - bestValue)
                         foundNext = True
 
+                lenClosed += 1
+                lenOpened -= 1
+
                 if not foundNext:
-                    lenClosed += 1
                     stuckFlag = True
 
         toret = {

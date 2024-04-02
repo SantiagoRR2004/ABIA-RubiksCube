@@ -43,6 +43,7 @@ class BusquedaSimpleHillClimbing(Busqueda):
 
                 if not foundNext:
                     lenClosed += 1
+                    lenOpened -= 1
                     stuckFlag = True
 
         toret = {
