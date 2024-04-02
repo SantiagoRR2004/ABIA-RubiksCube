@@ -35,9 +35,13 @@ if __name__ == "__main__":
     for i in range(numberOfRows):
         nMovs = random.randint(minimum, maximum)
         data = createRow(nMovs)
-        with open(nameFile, "a", newline="") as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            if data:
+
+        if data:
+            with open(nameFile, "a", newline="") as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writerow(data)
 
-        print(f"Added {nMovs} movements")
+            print(f"Added {nMovs} movements")
+
+        else:
+            print(f"\t\t\t\t\tCouldn't add {nMovs} movements")
