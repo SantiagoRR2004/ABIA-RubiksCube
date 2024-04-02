@@ -30,6 +30,10 @@ if __name__ == "__main__":
 
     print()
     for name, solution in opsSolucion.items():
+        print(f"{name}{' '*(maxLength-len(name))} branching factor {solution['EBF']}")
+
+    print()
+    for name, solution in opsSolucion.items():
         print(
             f"{name}{' '*(maxLength-len(name))} lasted {solution['time']:.2f} seconds"
         )
