@@ -61,7 +61,14 @@ class Busqueda(metaclass=ABCMeta):
                 toret["lenOpened"] + toret["lenClosed"] - 1,
             )
 
-            solutions = [float(x) for x in solve(ecuation2, x) if x.is_real and x >= 0]
+            solutions = []
+
+            for sol in [x.evalf() for x in solve(ecuation2, x)]:
+                try:
+                    if sol >= 0:
+                        solutions.append(float(sol))
+                except TypeError:
+                    continue  # We don't do anything. This is for complex solutions
 
             if len(solutions) != 1:
                 print(
