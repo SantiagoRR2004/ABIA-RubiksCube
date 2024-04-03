@@ -47,6 +47,7 @@ if __name__ == "__main__":
             ]:
                 maxTime = int(row["maxTime"])
                 moves = ast.literal_eval(row["moves"])
+                print(f"Adding {timeToAdd}s to {moves}")
                 oldData[index] = createRow(0, maxTime + timeToAdd, moves)
                 break
 

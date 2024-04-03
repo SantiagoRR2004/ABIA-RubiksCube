@@ -40,6 +40,7 @@ if __name__ == "__main__":
             if len([x for x in row.values() if x == ""]) > 0:
                 maxTime = int(row["maxTime"])
                 moves = ast.literal_eval(row["moves"])
+                print(f"Refilling the moves {moves}")
                 oldData[index] = createRow(0, maxTime, moves)
                 break
 
