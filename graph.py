@@ -3,6 +3,7 @@ import ast
 import matplotlib.pyplot as plt
 import numpy as np
 from busquedas import allSearchTypes
+import seaborn as sns
 
 
 def createGraph(data, fieldnames, keyword: str, title: str = None, ylabel: str = None):
@@ -12,22 +13,29 @@ def createGraph(data, fieldnames, keyword: str, title: str = None, ylabel: str =
     if title is None:
         title = ylabel + " vs Number of moves"
 
+    plt.figure(title)
+
     lenKey = len(keyword)
 
-    plots = []
+    plots = sorted(
+        [key for key in fieldnames if key[-lenKey:].lower() == keyword.lower()]
+    )
 
-    plt.figure(title)
-    for key in fieldnames:
-        if key[-lenKey:].lower() == keyword.lower():
-            plots.append(
-                plt.plot(
-                    list(data.keys()),
-                    [x[key] for x in data.values()],
-                    label=key[:-lenKey],
-                ),
-            )
+    sns.reset_orig()  # get default matplotlib styles back
+    colors = sns.color_palette("hsv_r", n_colors=len(plots))
+    LINE_STYLES = ["solid", "dashed", "dashdot", "dotted"]
+    MAXLINEWIDTH = 5
 
-    # plt.gca().clabel(plots, inline=True, fontsize=10)
+    for pos, plot in enumerate(plots):
+        plt.plot(
+            list(data.keys()),
+            [x[plot] for x in data.values()],
+            label=plot[:-lenKey],
+            color=colors[pos],
+            linestyle=LINE_STYLES[pos % len(LINE_STYLES)],
+            zorder=pos,
+            linewidth=(MAXLINEWIDTH / len(plots)) * (len(plots) - pos) + 1,
+        )
 
     handles, labels = plt.gca().get_legend_handles_labels()
 
