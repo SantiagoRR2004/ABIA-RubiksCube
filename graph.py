@@ -14,16 +14,30 @@ def createGraph(data, fieldnames, keyword: str, title: str = None, ylabel: str =
 
     lenKey = len(keyword)
 
+    plots = []
+
     plt.figure(title)
     for key in fieldnames:
         if key[-lenKey:].lower() == keyword.lower():
-            plt.plot(
-                list(data.keys()),
-                [x[key] for x in data.values()],
-                label=key[:-lenKey],
+            plots.append(
+                plt.plot(
+                    list(data.keys()),
+                    [x[key] for x in data.values()],
+                    label=key[:-lenKey],
+                ),
             )
 
-    plt.legend()
+    # plt.gca().clabel(plots, inline=True, fontsize=10)
+
+    handles, labels = plt.gca().get_legend_handles_labels()
+
+    # Sort the handles and labels alphabetically by labels
+    handles_labels_sorted = sorted(zip(handles, labels), key=lambda x: x[1])
+    handles_sorted, labels_sorted = zip(*handles_labels_sorted)
+
+    # Create the legend with sorted handles and labels
+    plt.legend(handles_sorted, labels_sorted)
+
     plt.xlabel("Number of moves")
     plt.xticks(list(data.keys()))
     plt.ylabel(ylabel)
