@@ -75,7 +75,9 @@ if __name__ == "__main__":
                 [
                     float(x[key])
                     for x in data
-                    if len(ast.literal_eval(x["moves"])) == num and x[key] != ""
+                    if len(ast.literal_eval(x["moves"])) == num
+                    and x[key] != ""
+                    and x[key] != "inf"
                 ]
             )
             avgData[num][key] = number
@@ -92,6 +94,7 @@ if __name__ == "__main__":
                             if len(ast.literal_eval(x["moves"])) == num
                             and x[algo + "lenSolution"] != "inf"
                             and x[key] != ""
+                            and x[key] != "inf"
                         ]
                     )
                     avgDataFinish[num][key] = number
@@ -130,7 +133,7 @@ if __name__ == "__main__":
                 [
                     float(x[key])
                     for x in data
-                    if x["lenMinSolution"] == num and x[key] != ""
+                    if x["lenMinSolution"] == num and x[key] != "" and x[key] != "inf"
                 ]
             )
             avgMinData[num][key] = number
@@ -148,6 +151,7 @@ if __name__ == "__main__":
                             if x["lenMinSolution"] == num
                             and x[algo + "lenSolution"] != "inf"
                             and x[key] != ""
+                            and x[key] != "inf"
                         ]
                     )
                     avgMinDataFinish[num][key] = number
