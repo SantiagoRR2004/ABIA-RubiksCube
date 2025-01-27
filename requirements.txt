@@ -1,1 +1,5 @@
 black
+sympy
+matplotlib
+numpy
+seaborn
